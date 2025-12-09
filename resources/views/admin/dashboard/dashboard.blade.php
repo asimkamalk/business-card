@@ -66,10 +66,39 @@
             grid-template-columns: repeat(2, 1fr);
         }
     }
+    .tab-button {
+        transition: all 0.3s ease;
+    }
+    .tab-button.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
 </style>
 <div class="dashboard-wrapper">
     <!-- Main Content -->
     <main style="max-width: 1280px; margin: 0 auto;">
+        <!-- Tabs Navigation -->
+        <div class="bg-white rounded-2xl shadow-lg mb-6 p-2">
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('admin.dashboard') }}" 
+                   class="tab-button px-6 py-3 rounded-xl font-semibold {{ request()->routeIs('admin.dashboard') ? 'active' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <i class="fas fa-chart-line mr-2"></i> Dashboard
+                </a>
+                <a href="{{ route('admin.admin-products.index') }}" 
+                   class="tab-button px-6 py-3 rounded-xl font-semibold {{ request()->routeIs('admin.admin-products.*') ? 'active' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <i class="fas fa-box mr-2"></i> Products (NFC Cards)
+                </a>
+                <a href="{{ route('admin.orders.index') }}" 
+                   class="tab-button px-6 py-3 rounded-xl font-semibold {{ request()->routeIs('admin.orders.*') ? 'active' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <i class="fas fa-shopping-cart mr-2"></i> Orders
+                </a>
+                <a href="{{ route('admin.users.index') }}" 
+                   class="tab-button px-6 py-3 rounded-xl font-semibold {{ request()->routeIs('admin.users.*') ? 'active' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <i class="fas fa-users mr-2"></i> Users
+                </a>
+            </div>
+        </div>
+        
         <!-- Stats Cards -->
         <div class="stats-grid">
             <!-- Total Users -->

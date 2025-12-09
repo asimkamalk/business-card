@@ -21,23 +21,24 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#6366f1',
-                        secondary: '#8b5cf6',
-                        accent: '#ec4899',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Poppins', 'sans-serif'],
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: '#6366f1',
+                            secondary: '#8b5cf6',
+                            accent: '#ec4899',
+                        },
+                        fontFamily: {
+                            sans: ['Inter', 'sans-serif'],
+                            heading: ['Poppins', 'sans-serif'],
+                        }
                     }
                 }
             }
-        }
-    </script>
+        </script>
 
     <style>
         * {
@@ -48,6 +49,9 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
             min-height: 100vh;
+        }
+        .dark body {
+            background: linear-gradient(to bottom, #0f172a 0%, #1e293b 100%);
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -122,16 +126,19 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
+        .dark .nav-blur {
+            background: rgba(15, 23, 42, 0.9);
+        }
     </style>
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased bg-white dark:bg-slate-900">
     <div class="min-h-screen">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
         @isset($header)
-        <header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg">
+        <header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-800 dark:via-purple-800 dark:to-pink-800 text-white shadow-lg">
             <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                 <div class="fade-in">
                     {{ $header }}
@@ -144,7 +151,7 @@
         <main class="py-8">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 @if(session('success'))
-                <div class="mb-6 bg-green-50 border-l-4 border-green-500 text-green-800 px-6 py-4 rounded-lg shadow-md fade-in">
+                <div class="mb-6 bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 dark:border-green-400 text-green-800 dark:text-green-200 px-6 py-4 rounded-lg shadow-md fade-in">
                     <div class="flex items-center">
                         <i class="fas fa-check-circle mr-3 text-xl"></i>
                         <div>{{ session('success') }}</div>
@@ -153,7 +160,7 @@
                 @endif
 
                 @if(session('error'))
-                <div class="mb-6 bg-red-50 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-lg shadow-md fade-in">
+                <div class="mb-6 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 dark:border-red-400 text-red-800 dark:text-red-200 px-6 py-4 rounded-lg shadow-md fade-in">
                     <div class="flex items-center">
                         <i class="fas fa-exclamation-circle mr-3 text-xl"></i>
                         <div>{{ session('error') }}</div>
@@ -165,6 +172,38 @@
             </div>
         </main>
     </div>
+    
+    <script>
+        // Dark mode functionality - sync with home page
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const shouldBeDark = savedTheme === 'dark' || (!savedTheme && true); // Default to dark
+            
+            if (shouldBeDark) {
+                document.documentElement.classList.add('dark');
+                updateDarkModeIcons(true);
+            } else {
+                document.documentElement.classList.remove('dark');
+                updateDarkModeIcons(false);
+            }
+
+            function updateDarkModeIcons(isDark) {
+                const icon = document.getElementById('dark-mode-icon');
+                const iconMobile = document.getElementById('dark-mode-icon-mobile');
+                if (icon) icon.className = isDark ? 'fas fa-sun text-lg' : 'fas fa-moon text-lg';
+                if (iconMobile) iconMobile.className = isDark ? 'fas fa-sun text-lg' : 'fas fa-moon text-lg';
+            }
+
+            function toggleDarkMode() {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateDarkModeIcons(isDark);
+            }
+
+            document.getElementById('dark-mode-toggle')?.addEventListener('click', toggleDarkMode);
+            document.getElementById('dark-mode-toggle-mobile')?.addEventListener('click', toggleDarkMode);
+        })();
+    </script>
 </body>
 
 </html>

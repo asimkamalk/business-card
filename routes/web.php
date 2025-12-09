@@ -15,8 +15,21 @@ Route::get('/', function () {
         ->latest()
         ->take(6)
         ->get();
-    return view('welcome', compact('products'));
+    $adminProducts = \App\Models\AdminProduct::where('is_active', true)
+        ->orderBy('featured', 'desc')
+        ->orderBy('created_at', 'desc')
+        ->take(6)
+        ->get();
+    return view('welcome', compact('products', 'adminProducts'));
 })->name('home');
+
+// Public products page
+Route::get('/all-products', [\App\Http\Controllers\PublicProductController::class, 'index'])->name('products.all');
+
+// Public order routes
+Route::get('/products/{productId}/order', [\App\Http\Controllers\OrderController::class, 'create'])->name('orders.create');
+Route::post('/products/{productId}/order', [\App\Http\Controllers\OrderController::class, 'store'])->name('orders.store');
+Route::get('/orders/{id}/success', [\App\Http\Controllers\OrderController::class, 'success'])->name('orders.success');
 
 // Authentication routes (must come before catch-all route)
 require __DIR__ . '/auth.php';
@@ -42,6 +55,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('users/{user}/suspend', [UserController::class, 'suspend'])->name('users.suspend');
     Route::post('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
     Route::delete('users/{id}/force-delete', [UserController::class, 'forceDelete'])->name('users.force-delete');
+    
+    // Admin Products (NFC Cards) management
+    Route::resource('admin-products', \App\Http\Controllers\Admin\AdminProductController::class);
+    
+    // Orders management
+    Route::get('orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{id}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
+    Route::post('orders/{id}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::delete('orders/{id}', [\App\Http\Controllers\Admin\OrderController::class, 'destroy'])->name('orders.destroy');
 });
 
 // Catch-all route for public profiles (must be last)

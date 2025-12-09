@@ -207,16 +207,95 @@
             }
         }
 
+        /* Scroll Animation Base Styles */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.6s ease-out;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .animate-on-scroll.animated {
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Fade In Animation */
+        .animate-fade-in {
+            opacity: 0;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .animate-fade-in.animated {
+            opacity: 1;
+        }
+
+        /* Slide Up Animation */
+        .animate-slide-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-slide-up.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Slide Left Animation */
+        .animate-slide-left {
+            opacity: 0;
+            transform: translateX(-50px) translateY(0);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-slide-left.animated {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        }
+
+        /* Slide Right Animation */
+        .animate-slide-right {
+            opacity: 0;
+            transform: translateX(50px) translateY(0);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-slide-right.animated {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        }
+
+        /* Scale In Animation */
+        .animate-scale-in {
+            opacity: 0;
+            transform: scale(0.9) translateY(0);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-scale-in.animated {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Rotate In Animation */
+        .animate-rotate-in {
+            opacity: 0;
+            transform: rotate(-5deg) scale(0.95) translateY(0);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-rotate-in.animated {
+            opacity: 1;
+            transform: rotate(0deg) scale(1) translateY(0);
+        }
+
+        /* Stagger Animation Delay */
+        .animate-delay-100 { transition-delay: 0.1s; }
+        .animate-delay-200 { transition-delay: 0.2s; }
+        .animate-delay-300 { transition-delay: 0.3s; }
+        .animate-delay-400 { transition-delay: 0.4s; }
+        .animate-delay-500 { transition-delay: 0.5s; }
+        .animate-delay-600 { transition-delay: 0.6s; }
 
         .pattern-dots {
             background-image: radial-gradient(circle, rgba(102, 126, 234, 0.1) 1px, transparent 1px);
@@ -252,6 +331,7 @@
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="#features" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">Features</a>
                     <a href="#how-it-works" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">How It Works</a>
+                    <a href="{{ route('products.all') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">All Products</a>
                     @if($products->count() > 0)
                     <a href="#products" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">Products</a>
                     @endif
@@ -277,6 +357,7 @@
             <div class="px-4 py-4 space-y-3">
                 <a href="#features" class="block text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium py-2">Features</a>
                 <a href="#how-it-works" class="block text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium py-2">How It Works</a>
+                <a href="{{ route('products.all') }}" class="block text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium py-2">All Products</a>
                 @if($products->count() > 0)
                 <a href="#products" class="block text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium py-2">Products</a>
                 @endif
@@ -288,11 +369,11 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-gradient text-white pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden">
+    <section id="hero" class="hero-gradient text-white pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden hero-section scroll-mt-20">
         <div class="absolute inset-0 pattern-dots opacity-20"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="text-center md:text-left animate-on-scroll">
+                <div class="text-center md:text-left animate-slide-left">
                     <div class="inline-block mb-4 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold">
                         <i class="fas fa-sparkles mr-2"></i> Trusted by 10,000+ Professionals
                     </div>
@@ -325,7 +406,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative animate-on-scroll">
+                <div class="relative animate-slide-right">
                     <div class="card-preview">
                         <div class="card-preview-inner">
                             <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden floating">
@@ -378,19 +459,19 @@
     <section class="py-16 bg-white dark:bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="stat-card text-center">
+                <div class="stat-card text-center animate-scale-in animate-delay-100">
                     <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">10K+</div>
                     <div class="text-gray-600 dark:text-gray-400 font-medium">Active Users</div>
                 </div>
-                <div class="stat-card text-center">
+                <div class="stat-card text-center animate-scale-in animate-delay-200">
                     <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">50K+</div>
                     <div class="text-gray-600 dark:text-gray-400 font-medium">Cards Created</div>
                 </div>
-                <div class="stat-card text-center">
+                <div class="stat-card text-center animate-scale-in animate-delay-300">
                     <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">1M+</div>
                     <div class="text-gray-600 dark:text-gray-400 font-medium">Connections Made</div>
                 </div>
-                <div class="stat-card text-center">
+                <div class="stat-card text-center animate-scale-in animate-delay-400">
                     <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">4.9/5</div>
                     <div class="text-gray-600 dark:text-gray-400 font-medium">User Rating</div>
                 </div>
@@ -401,7 +482,7 @@
     <!-- Features Section -->
     <section id="features" class="py-20 bg-gray-50 dark:bg-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 animate-on-scroll">
+            <div class="text-center mb-16 animate-fade-in">
                 <h2 class="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
                     Everything You Need to <span class="gradient-text">Stand Out</span>
                 </h2>
@@ -411,7 +492,7 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-100">
                     <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fas fa-palette text-white text-2xl"></i>
                     </div>
@@ -424,7 +505,7 @@
                     </a>
                 </div>
 
-                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-200">
                     <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fas fa-qrcode text-white text-2xl"></i>
                     </div>
@@ -437,7 +518,7 @@
                     </a>
                 </div>
 
-                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-300">
                     <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fas fa-share-alt text-white text-2xl"></i>
                     </div>
@@ -450,7 +531,7 @@
                     </a>
                 </div>
 
-                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-400">
                     <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fas fa-chart-line text-white text-2xl"></i>
                     </div>
@@ -463,7 +544,7 @@
                     </a>
                 </div>
 
-                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-500">
                     <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fas fa-mobile-alt text-white text-2xl"></i>
                     </div>
@@ -476,7 +557,7 @@
                     </a>
                 </div>
 
-                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="feature-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-600">
                     <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fas fa-lock text-white text-2xl"></i>
                     </div>
@@ -492,10 +573,113 @@
         </div>
     </section>
 
+    <!-- NFC Cards Section -->
+    @if(isset($adminProducts))
+    <section id="nfc-cards" class="py-20 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+                    Premium <span class="gradient-text">NFC Cards</span>
+                </h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Get your professional NFC business cards and share your digital profile instantly
+                </p>
+            </div>
+
+            @if($adminProducts->count() > 0)
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                @foreach($adminProducts->take(6) as $index => $product)
+                    @php
+                        $delayClass = 'animate-delay-' . (($index % 3) * 100 + 100);
+                    @endphp
+                    <a href="{{ route('orders.create', $product->id) }}" class="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 block cursor-pointer animate-slide-up {{ $delayClass }}">
+                        <!-- Product Image -->
+                        <div class="relative h-64 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 overflow-hidden">
+                            @if($product->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($product->image))
+                                <img src="{{ asset('storage/' . $product->image) }}" 
+                                     alt="{{ $product->name }}"
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center">
+                                    <i class="fas fa-credit-card text-indigo-300 dark:text-indigo-600 text-5xl"></i>
+                                </div>
+                            @endif
+                            @if($product->featured)
+                                <div class="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg z-10">
+                                    <i class="fas fa-star mr-1"></i> Featured
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <!-- Product Info -->
+                        <div class="p-6">
+                            <h3 class="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                                {{ $product->name }}
+                            </h3>
+                            
+                            @if($product->description)
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                                    {{ $product->description }}
+                                </p>
+                            @endif
+                            
+                            @if($product->features)
+                                <div class="mb-4">
+                                    <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                        @foreach(explode("\n", $product->features) as $feature)
+                                            @if(trim($feature))
+                                                <li class="flex items-start">
+                                                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                                    <span>{{ trim($feature) }}</span>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-3xl font-bold gradient-text">AED {{ number_format($product->price, 2) }}</span>
+                                @if($product->stock_quantity !== null)
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ $product->stock_quantity }} in stock</span>
+                                @endif
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="flex gap-3">
+                                <div class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3 rounded-xl font-semibold text-center">
+                                    <i class="fas fa-shopping-cart mr-2"></i> Order Now
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+            
+            <!-- View All Products Button -->
+            <div class="text-center mt-8">
+                <a href="{{ route('products.all') }}"
+                   class="inline-flex items-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-th mr-2"></i> View All Products
+                </a>
+            </div>
+            @else
+            <div class="text-center py-12">
+                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-credit-card text-indigo-600 dark:text-indigo-400 text-4xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">NFC Cards Coming Soon</h3>
+                <p class="text-gray-600 dark:text-gray-400">We're preparing amazing NFC card products for you. Check back soon!</p>
+            </div>
+            @endif
+        </div>
+    </section>
+    @endif
+
     <!-- How It Works Section -->
     <section id="how-it-works" class="py-20 bg-white dark:bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 animate-on-scroll">
+            <div class="text-center mb-16 animate-fade-in">
                 <h2 class="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
                     How It <span class="gradient-text">Works</span>
                 </h2>
@@ -505,7 +689,7 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-12">
-                <div class="text-center animate-on-scroll">
+                <div class="text-center animate-rotate-in animate-delay-100">
                     <div class="relative mb-8">
                         <div class="step-number w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto shadow-lg">
                             1
@@ -518,7 +702,7 @@
                     </p>
                 </div>
 
-                <div class="text-center animate-on-scroll">
+                <div class="text-center animate-rotate-in animate-delay-200">
                     <div class="relative mb-8">
                         <div class="step-number w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto shadow-lg">
                             2
@@ -531,7 +715,7 @@
                     </p>
                 </div>
 
-                <div class="text-center animate-on-scroll">
+                <div class="text-center animate-rotate-in animate-delay-300">
                     <div class="relative mb-8">
                         <div class="step-number w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto shadow-lg">
                             3
@@ -555,7 +739,7 @@
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-20 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-800 dark:via-slate-800 dark:to-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 animate-on-scroll">
+            <div class="text-center mb-16 animate-fade-in">
                 <h2 class="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
                     Loved by <span class="gradient-text">Thousands</span>
                 </h2>
@@ -565,7 +749,7 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="testimonial-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="testimonial-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-100">
                     <div class="flex items-center mb-6">
                         <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
                             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" class="w-full h-full object-cover" alt="Sarah">
@@ -587,7 +771,7 @@
                     </p>
                 </div>
 
-                <div class="testimonial-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="testimonial-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-200">
                     <div class="flex items-center mb-6">
                         <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
                             <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" class="w-full h-full object-cover" alt="Michael">
@@ -609,7 +793,7 @@
                     </p>
                 </div>
 
-                <div class="testimonial-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg">
+                <div class="testimonial-card bg-white dark:bg-slate-700 p-8 rounded-2xl shadow-lg animate-slide-up animate-delay-300">
                     <div class="flex items-center mb-6">
                         <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
                             <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop" class="w-full h-full object-cover" alt="Emily">
@@ -638,7 +822,7 @@
     @if($products->count() > 0)
     <section id="products" class="py-20 bg-white dark:bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 animate-on-scroll">
+            <div class="text-center mb-16 animate-fade-in">
                 <h2 class="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
                     Featured <span class="gradient-text">Products</span>
                 </h2>
@@ -648,8 +832,11 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($products as $product)
-                    <div class="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                @foreach($products as $index => $product)
+                    @php
+                        $delayClass = 'animate-delay-' . (($index % 3) * 100 + 100);
+                    @endphp
+                    <div class="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 animate-scale-in {{ $delayClass }}">
                         <!-- Product Image -->
                         <div class="relative h-64 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 overflow-hidden">
                             @if($product->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($product->image))
@@ -682,7 +869,7 @@
                             
                             <div class="flex items-center justify-between mb-4">
                                 @if($product->price)
-                                    <span class="text-3xl font-bold gradient-text">${{ number_format($product->price, 2) }}</span>
+                                    <span class="text-3xl font-bold gradient-text">AED {{ number_format($product->price, 2) }}</span>
                                 @else
                                     <span class="text-lg text-gray-500 dark:text-gray-400">Contact for pricing</span>
                                 @endif
@@ -901,23 +1088,48 @@
             });
         });
 
-        // Animate on scroll
+        // Enhanced Animate on scroll with multiple animation types
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '0px 0px -100px 0px'
         };
 
         const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('animated');
+                    // Don't observe again once animated for better performance
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
+        // Observe all animation classes
+        const animationSelectors = [
+            '.animate-on-scroll',
+            '.animate-fade-in',
+            '.animate-slide-up',
+            '.animate-slide-left',
+            '.animate-slide-right',
+            '.animate-scale-in',
+            '.animate-rotate-in'
+        ];
+
+        animationSelectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => {
+                observer.observe(el);
+            });
         });
+
+        // Parallax effect for hero section (disabled to prevent header overlap)
+        // const heroSection = document.querySelector('.hero-section');
+        // if (heroSection) {
+        //     window.addEventListener('scroll', () => {
+        //         const scrolled = window.pageYOffset;
+        //         const rate = scrolled * 0.5;
+        //         heroSection.style.transform = `translateY(${rate}px)`;
+        //     });
+        // }
 
         // Navbar background on scroll
         let lastScroll = 0;

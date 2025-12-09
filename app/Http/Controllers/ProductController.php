@@ -200,4 +200,3 @@ class ProductController extends Controller
             ->with('success', 'Product deleted successfully!');
     }
 }
-

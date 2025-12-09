@@ -430,6 +430,21 @@
         </div>
         @endif
 
+             <!-- Location -->
+             @if($profile && $profile->location)
+        <div class="{{ $currentTheme['card'] }} rounded-xl p-4 mb-10 shadow-md border">
+            <div class="flex items-start">
+                <div class="{{ $currentTheme['iconBg'] }} {{ $currentTheme['iconText'] }} p-3 rounded-xl mr-4 flex-shrink-0">
+                    <i class="fas fa-map-marker-alt text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm {{ $currentTheme['secondaryText'] }} mb-1">Location edit</p>
+                    <p class="font-medium {{ $currentTheme['heading'] }}">{{ $profile->location }}</p>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Products -->
         @if($profile && $profile->products && $profile->products->count() > 0)
         <div class="mb-12">
@@ -473,21 +488,6 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
-        </div>
-        @endif
-
-        <!-- Location -->
-        @if($profile && $profile->location)
-        <div class="{{ $currentTheme['card'] }} rounded-xl p-4 mb-10 shadow-md border">
-            <div class="flex items-start">
-                <div class="{{ $currentTheme['iconBg'] }} {{ $currentTheme['iconText'] }} p-3 rounded-xl mr-4 flex-shrink-0">
-                    <i class="fas fa-map-marker-alt text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-sm {{ $currentTheme['secondaryText'] }} mb-1">Location</p>
-                    <p class="font-medium {{ $currentTheme['heading'] }}">{{ $profile->location }}</p>
-                </div>
             </div>
         </div>
         @endif

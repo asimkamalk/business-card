@@ -22,6 +22,7 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
+                darkMode: 'class',
                 theme: {
                     extend: {
                         colors: {
@@ -47,7 +48,21 @@
             }
         </style>
     </head>
-    <body class="font-sans text-gray-900 antialiased">
+    <body class="font-sans text-gray-900 dark:text-gray-100 antialiased bg-white dark:bg-slate-900">
         {{ $slot }}
+        
+        <script>
+            // Dark mode functionality - sync with home page
+            (function() {
+                const savedTheme = localStorage.getItem('theme');
+                const shouldBeDark = savedTheme === 'dark' || (!savedTheme && true); // Default to dark
+                
+                if (shouldBeDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            })();
+        </script>
     </body>
 </html>
