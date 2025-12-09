@@ -347,6 +347,20 @@
                             </div>
                         </a>
 
+                        <a href="{{ route('products.index') }}"
+                           class="quick-action-card block p-4 rounded-xl group">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-xl bg-orange-100 group-hover:bg-orange-600 transition flex items-center justify-center mr-4">
+                                    <i class="fas fa-box text-orange-600 group-hover:text-white transition"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-900 group-hover:text-orange-600 transition">Manage Products</h4>
+                                    <p class="text-sm text-gray-500">Add and manage your products</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400 group-hover:text-orange-600 transition"></i>
+                            </div>
+                        </a>
+
                         @if(auth()->user()->profile && auth()->user()->username)
                             <a href="{{ route('public.profile', auth()->user()->username) }}" 
                                target="_blank"

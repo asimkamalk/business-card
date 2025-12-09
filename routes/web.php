@@ -6,10 +6,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicProfileController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ProductController;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
+    $products = \App\Models\Product::with('profile.user')
+        ->where('featured', true)
+        ->latest()
+        ->take(6)
+        ->get();
+    return view('welcome', compact('products'));
 })->name('home');
 
 // Authentication routes (must come before catch-all route)
@@ -20,6 +26,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::match(['put', 'patch'], '/profile', [ProfileController::class, 'update'])->name('profile.update');
+    
+    // Product routes
+    Route::resource('products', ProductController::class);
 });
 
 // Admin routes (must come before catch-all route)
