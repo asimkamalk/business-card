@@ -91,8 +91,10 @@ class ProfileController extends Controller
             'products.*.name' => 'nullable|string|max:255',
             'products.*.description' => 'nullable|string',
             'products.*.price' => 'nullable|numeric|min:0',
+            'products.*.product_link_url' => 'nullable|url|max:255',
             'products.*.featured' => 'nullable|boolean',
             'products.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'google_maps_link' => 'nullable|url|max:255',
         ]);
 
         $user = Auth::user();
@@ -112,7 +114,7 @@ class ProfileController extends Controller
         }
 
         // Prepare update data
-        $updateData = $request->only(['location', 'company', 'position', 'bio']);
+        $updateData = $request->only(['location', 'google_maps_link', 'company', 'position', 'bio']);
         
         // Always update theme if provided, otherwise keep existing theme
         if ($request->has('theme') && !empty($request->theme)) {
@@ -168,9 +170,27 @@ class ProfileController extends Controller
                 if (!empty($contact['type']) && !empty($contact['value']) && 
                     $contact['value'] !== 'default@example.com' && 
                     trim($contact['value']) !== '') {
+                    
+                    $value = trim($contact['value']);
+                    
+                    // Convert WhatsApp numbers to wa.me links if needed
+                    if ($contact['type'] === 'whatsapp') {
+                        // If it's not already a link, convert it
+                        if (strpos($value, 'wa.me/') === false && strpos($value, 'whatsapp.com') === false) {
+                            // Extract only numbers
+                            $phoneNumber = preg_replace('/[^0-9]/', '', $value);
+                            if ($phoneNumber) {
+                                $value = 'https://wa.me/' . $phoneNumber;
+                            }
+                        } elseif (strpos($value, 'wa.me/') !== false && strpos($value, 'http') === false) {
+                            // Add https:// if missing
+                            $value = 'https://' . $value;
+                        }
+                    }
+                    
                     $validContacts[] = [
                         'type' => $contact['type'],
-                        'value' => trim($contact['value'])
+                        'value' => $value
                     ];
                 }
             }
@@ -240,6 +260,7 @@ class ProfileController extends Controller
                             'name' => $name,
                             'description' => $description,
                             'price' => isset($productData['price']) && $productData['price'] !== '' ? $productData['price'] : null,
+                            'product_link_url' => isset($productData['product_link_url']) && !empty(trim($productData['product_link_url'])) ? trim($productData['product_link_url']) : null,
                             'featured' => isset($productData['featured']) ? (bool)$productData['featured'] : false,
                         ]
                     ];
@@ -286,6 +307,7 @@ class ProfileController extends Controller
                         'name' => $productName,
                         'description' => !empty($productData['description']) ? $productData['description'] : null,
                         'price' => $productData['price'],
+                        'product_link_url' => $productData['product_link_url'] ?? null,
                         'featured' => $productData['featured'],
                         'image' => $productImage
                     ]);

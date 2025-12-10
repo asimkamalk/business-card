@@ -66,6 +66,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('orders/{id}', [\App\Http\Controllers\Admin\OrderController::class, 'destroy'])->name('orders.destroy');
 });
 
+// Public product view route (must be before catch-all)
+Route::get('/{username}/product/{productId}', [PublicProfileController::class, 'showProduct'])
+    ->name('public.product');
+
+// Download vCard contact file
+Route::get('/{username}/vcard', [PublicProfileController::class, 'downloadVCard'])
+    ->name('public.vcard');
+
 // Catch-all route for public profiles (must be last)
 Route::get('/{username}', [PublicProfileController::class, 'show'])
     ->name('public.profile');

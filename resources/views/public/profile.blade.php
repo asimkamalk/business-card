@@ -9,7 +9,18 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @php
+        $theme = $profile->theme ?? 'modern';
+        $themeFonts = [
+            'modern' => 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap',
+            'classic' => 'https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap',
+            'minimal' => 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap',
+            'dark' => 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;500;600;700&display=swap',
+            'colorful' => 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Comfortaa:wght@400;500;600;700&display=swap',
+        ];
+        $fontLink = $themeFonts[$theme] ?? $themeFonts['modern'];
+    @endphp
+    <link href="{{ $fontLink }}" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -32,6 +43,8 @@
                 'button' => 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl',
                 'card' => 'bg-white border-2 border-indigo-100 shadow-md hover:shadow-lg',
                 'badge' => 'bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-800 border border-indigo-200',
+                'bodyFont' => "'Inter', sans-serif",
+                'headingFont' => "'Space Grotesk', sans-serif",
             ],
             'classic' => [
                 'body' => 'background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%);',
@@ -45,6 +58,8 @@
                 'button' => 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl',
                 'card' => 'bg-white border-2 border-blue-100 shadow-md hover:shadow-lg',
                 'badge' => 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800 border border-blue-200',
+                'bodyFont' => "'Crimson Text', serif",
+                'headingFont' => "'Playfair Display', serif",
             ],
             'minimal' => [
                 'body' => 'background: linear-gradient(135deg, #ffffff 0%, #f9fafb 50%, #f3f4f6 100%);',
@@ -58,6 +73,8 @@
                 'button' => 'bg-gradient-to-r from-slate-700 to-gray-800 hover:from-slate-800 hover:to-gray-900 shadow-lg hover:shadow-xl',
                 'card' => 'bg-white border-2 border-slate-200 shadow-md hover:shadow-lg',
                 'badge' => 'bg-gradient-to-r from-slate-100 to-gray-100 text-slate-800 border border-slate-200',
+                'bodyFont' => "'Work Sans', sans-serif",
+                'headingFont' => "'DM Sans', sans-serif",
             ],
             'dark' => [
                 'body' => 'background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);',
@@ -71,6 +88,8 @@
                 'button' => 'bg-gradient-to-r from-slate-700 to-gray-800 hover:from-slate-600 hover:to-gray-700 shadow-lg hover:shadow-xl border border-slate-600',
                 'card' => 'bg-slate-800 border-2 border-slate-700 shadow-lg hover:shadow-xl',
                 'badge' => 'bg-gradient-to-r from-slate-700 to-gray-800 text-slate-200 border border-slate-600',
+                'bodyFont' => "'JetBrains Mono', monospace",
+                'headingFont' => "'Orbitron', sans-serif",
             ],
             'colorful' => [
                 'body' => 'background: linear-gradient(135deg, #fef3f2 0%, #fce7f3 25%, #f3e8ff 50%, #e9d5ff 75%, #ddd6fe 100%);',
@@ -84,15 +103,20 @@
                 'button' => 'bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:via-purple-700 hover:to-indigo-700 shadow-lg hover:shadow-xl',
                 'card' => 'bg-white border-2 border-pink-200 shadow-md hover:shadow-lg',
                 'badge' => 'bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 text-pink-800 border border-pink-200',
+                'bodyFont' => "'Nunito', sans-serif",
+                'headingFont' => "'Comfortaa', cursive",
             ],
         ];
         $currentTheme = $themeStyles[$theme] ?? $themeStyles['modern'];
     @endphp
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: {{ $currentTheme['bodyFont'] }};
             {{ $currentTheme['body'] }}
             min-height: 100vh;
+        }
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: {{ $currentTheme['headingFont'] }};
         }
         img {
             max-width: 100%;
@@ -150,17 +174,6 @@
             transform: scale(1.15) rotate(5deg);
         }
         
-        /* Enhanced banner animations */
-        .banner-gradient {
-            background-size: 200% 200%;
-            animation: gradientShift 8s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
         
         /* Enhanced button styles */
         .theme-button {
@@ -282,24 +295,64 @@
         }
 
         function downloadQRCode() {
-            const qrModal = document.getElementById('qrModal');
-            const qrImage = qrModal ? qrModal.querySelector('img') : null;
-            const qrSvg = qrModal ? qrModal.querySelector('svg') : null;
+            const qrContainer = document.getElementById('qrCodeContainer');
+            const qrSvg = qrContainer ? qrContainer.querySelector('svg') : null;
             
-            if (qrImage && qrImage.src) {
+            if (qrSvg) {
                 try {
-                    const link = document.createElement('a');
-                    link.download = "{{ str_replace(' ', '-', $user->name) }}-business-card-qr.png";
-                    link.href = qrImage.src;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showNotification('QR code downloaded!');
+                    // Get SVG element
+                    const svgData = new XMLSerializer().serializeToString(qrSvg);
+                    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                    const svgUrl = URL.createObjectURL(svgBlob);
+                    
+                    // Create an image from SVG
+                    const img = new Image();
+                    img.onload = function() {
+                        // Create canvas and draw image
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 250;
+                        canvas.height = 250;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Draw white background
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Draw SVG image
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        // Convert to PNG and download
+                        canvas.toBlob(function(blob) {
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.download = "{{ str_replace(' ', '-', $user->name) }}-business-card-qr.png";
+                            link.href = url;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(url);
+                            URL.revokeObjectURL(svgUrl);
+                            showNotification('QR code downloaded!');
+                        }, 'image/png');
+                    };
+                    
+                    img.onerror = function() {
+                        // Fallback: download as SVG
+                        const link = document.createElement('a');
+                        link.download = "{{ str_replace(' ', '-', $user->name) }}-business-card-qr.svg";
+                        link.href = svgUrl;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(svgUrl);
+                        showNotification('QR code downloaded as SVG!');
+                    };
+                    
+                    img.src = svgUrl;
                 } catch (err) {
-                    showNotification('Please right-click on the QR code and save as image.');
+                    showNotification('Error downloading QR code. Please try right-clicking and saving the image.');
+                    console.error(err);
                 }
-            } else if (qrSvg) {
-                showNotification('Please right-click on the QR code and save as image.');
             } else {
                 showNotification('QR code not found.');
             }
@@ -307,39 +360,39 @@
     </script>
 </head>
 <body class="font-sans antialiased min-h-screen">
-    <!-- Banner with profile image -->
-    <div class="relative h-64">
+    <!-- Banner Header -->
+    <div class="h-48 bg-gray-100">
         @php
             $hasBanner = $profile && $profile->banner_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->banner_image) && !\Illuminate\Support\Str::contains($profile->banner_image, 'default-banner');
-            $hasProfile = $profile && $profile->profile_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->profile_image) && !\Illuminate\Support\Str::contains($profile->profile_image, 'default-avatar');
         @endphp
-        <div class="w-full h-full {{ $currentTheme['banner'] }} banner-gradient overflow-hidden">
-            @if($hasBanner)
-                <img src="{{ asset('storage/' . $profile->banner_image) }}" 
-                     class="w-full h-full object-cover opacity-20"
-                     style="max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: cover;"
-                     alt="Banner">
-            @else
-                <div class="w-full h-full {{ $currentTheme['banner'] }} flex items-center justify-center">
-                    <span class="text-white text-opacity-50 text-lg">Banner</span>
-                </div>
-            @endif
-        </div>
-        <div class="absolute -bottom-20 left-6 w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl floating" style="width: 128px; height: 128px; flex-shrink: 0;">
-            @if($hasProfile)
-                <img src="{{ asset('storage/' . $profile->profile_image) }}" 
-                     class="w-full h-full object-cover bg-white"
-                     style="width: 100%; height: 100%; object-fit: cover;"
-                     alt="{{ $user->name }}">
-            @else
-                <div class="w-full h-full {{ $currentTheme['banner'] }} flex items-center justify-center">
-                    <i class="fas fa-user text-white text-4xl"></i>
-                </div>
-            @endif
-        </div>
+        @if($hasBanner)
+            <img src="{{ asset('storage/' . $profile->banner_image) }}" 
+                 class="w-full h-full object-cover"
+                 style="max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: cover;"
+                 alt="Banner">
+        @endif
     </div>
 
-    <div class="px-4 pt-24 pb-8 max-w-2xl mx-auto">
+    <!-- Profile Section - Centered -->
+    <div class="px-4 pb-8 max-w-2xl mx-auto">
+        <!-- Profile Image - Centered below header (no overlap) -->
+        <div class="flex justify-center mt-8 mb-6">
+            @php
+                $hasProfile = $profile && $profile->profile_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->profile_image) && !\Illuminate\Support\Str::contains($profile->profile_image, 'default-avatar');
+            @endphp
+            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl" style="width: 128px; height: 128px; flex-shrink: 0;">
+                @if($hasProfile)
+                    <img src="{{ asset('storage/' . $profile->profile_image) }}" 
+                         class="w-full h-full object-cover bg-white"
+                         style="width: 100%; height: 100%; object-fit: cover;"
+                         alt="{{ $user->name }}">
+                @else
+                    <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-500 text-4xl"></i>
+                    </div>
+                @endif
+            </div>
+        </div>
         <!-- Profile info -->
         <div class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold font-heading {{ $currentTheme['heading'] }} mb-1">{{ $user->name }}</h1>
@@ -352,9 +405,11 @@
         </div>
         
             <div class="flex justify-center mb-8">
-            <button id="connectBtn" class="theme-button flex items-center {{ $currentTheme['button'] }} text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl">
-                <i class="fas fa-user-plus mr-2"></i> CONNECT NOW
-            </button>
+            <a href="{{ route('public.vcard', $user->username) }}" 
+               id="connectBtn" 
+               class="theme-button flex items-center {{ $currentTheme['button'] }} text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl no-underline">
+                <i class="fas fa-save mr-2"></i> SAVE CONTACT
+            </a>
         </div>
 
         <!-- Social Media -->
@@ -391,8 +446,14 @@
                         if ($info->type == 'mobile') {
                             $contactUrl = 'tel:' . preg_replace('/[^0-9+]/', '', $info->value);
                         } elseif ($info->type == 'whatsapp') {
-                            $phoneNumber = preg_replace('/[^0-9]/', '', $info->value);
-                            $contactUrl = 'https://wa.me/' . $phoneNumber;
+                            // If it's already a wa.me link, use it directly
+                            if (strpos($info->value, 'wa.me/') !== false || strpos($info->value, 'whatsapp.com') !== false) {
+                                $contactUrl = (strpos($info->value, 'http') === 0 ? '' : 'https://') . $info->value;
+                            } else {
+                                // Extract phone number and create wa.me link
+                                $phoneNumber = preg_replace('/[^0-9]/', '', $info->value);
+                                $contactUrl = 'https://wa.me/' . $phoneNumber;
+                            }
                         } elseif ($info->type == 'email') {
                             $contactUrl = 'mailto:' . $info->value;
                         } elseif ($info->type == 'website') {
@@ -421,7 +482,14 @@
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm {{ $currentTheme['secondaryText'] }} mb-1 capitalize">{{ $info->type }}</p>
-                                <p class="font-medium {{ $currentTheme['heading'] }} truncate">{{ $info->value }}</p>
+                                @php
+                                    $displayValue = $info->value;
+                                    // For WhatsApp, show just the number if it's a wa.me link
+                                    if ($info->type == 'whatsapp' && strpos($info->value, 'wa.me/') !== false) {
+                                        $displayValue = preg_replace('/.*wa\.me\/([0-9]+).*/', '$1', $info->value);
+                                    }
+                                @endphp
+                                <p class="font-medium {{ $currentTheme['heading'] }} truncate">{{ $displayValue }}</p>
                             </div>
                         </div>
                     </a>
@@ -432,17 +500,30 @@
 
              <!-- Location -->
              @if($profile && $profile->location)
-        <div class="{{ $currentTheme['card'] }} rounded-xl p-4 mb-10 shadow-md border">
+        @if($profile->google_maps_link)
+            <a href="{{ $profile->google_maps_link }}" target="_blank" rel="noopener noreferrer" class="block {{ $currentTheme['card'] }} rounded-xl p-4 mb-10 shadow-md border hover:shadow-lg transition-shadow cursor-pointer">
+        @else
+            <div class="{{ $currentTheme['card'] }} rounded-xl p-4 mb-10 shadow-md border">
+        @endif
             <div class="flex items-start">
                 <div class="{{ $currentTheme['iconBg'] }} {{ $currentTheme['iconText'] }} p-3 rounded-xl mr-4 flex-shrink-0">
                     <i class="fas fa-map-marker-alt text-xl"></i>
                 </div>
-                <div>
-                    <p class="text-sm {{ $currentTheme['secondaryText'] }} mb-1">Location edit</p>
+                <div class="flex-1">
+                    <p class="text-sm {{ $currentTheme['secondaryText'] }} mb-1">Location</p>
                     <p class="font-medium {{ $currentTheme['heading'] }}">{{ $profile->location }}</p>
+                    @if($profile->google_maps_link)
+                        <p class="text-xs {{ $currentTheme['text'] }} mt-1 flex items-center">
+                            <i class="fas fa-external-link-alt mr-1"></i> Click to view on Google Maps
+                        </p>
+                    @endif
                 </div>
             </div>
-        </div>
+        @if($profile->google_maps_link)
+            </a>
+        @else
+            </div>
+        @endif
         @endif
 
         <!-- Products -->
@@ -454,7 +535,15 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach($profile->products->take(4) as $product)
-                    <div class="product-card gradient-border rounded-xl overflow-hidden {{ $theme === 'dark' ? 'bg-gray-800' : 'bg-white' }} shadow-md hover:shadow-xl transition-shadow">
+                    @php
+                        $productUrl = $product->product_link_url 
+                            ? $product->product_link_url 
+                            : route('public.product', ['username' => $user->username, 'productId' => $product->id]);
+                        $isExternal = $product->product_link_url ? true : false;
+                    @endphp
+                    <a href="{{ $productUrl }}" 
+                       @if($isExternal) target="_blank" rel="noopener noreferrer" @endif
+                       class="product-card gradient-border rounded-xl overflow-hidden {{ $theme === 'dark' ? 'bg-gray-800' : 'bg-white' }} shadow-md hover:shadow-xl transition-shadow block cursor-pointer">
                         <div class="relative h-40 overflow-hidden">
                             @php
                                 $hasProductImage = $product->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($product->image) && !\Illuminate\Support\Str::contains($product->image, 'default-property');
@@ -485,8 +574,13 @@
                                 @endif
                             </div>
                             <p class="{{ $currentTheme['bodyText'] }} text-sm mb-3 line-clamp-2">{{ $product->description }}</p>
+                            @if($isExternal)
+                                <p class="text-xs {{ $currentTheme['text'] }} flex items-center">
+                                    <i class="fas fa-external-link-alt mr-1"></i> External Link
+                                </p>
+                            @endif
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </div>
@@ -525,7 +619,13 @@
                 </button>
             </div>
             <div class="flex justify-center mb-4 p-4 {{ $theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50' }} rounded-xl">
-                {!! $qrcode ?? '<p class="text-center text-gray-500">QR code not available</p>' !!}
+                @if(isset($qrcodeSvg))
+                    <div id="qrCodeContainer" class="w-64 h-64 flex items-center justify-center">
+                        {!! $qrcodeSvg !!}
+                    </div>
+                @else
+                    <p class="text-center text-gray-500">QR code not available</p>
+                @endif
             </div>
             <p class="text-center {{ $currentTheme['bodyText'] }} mb-4 text-sm">
                 Point your camera at the QR code to save this contact to your phone
@@ -560,20 +660,4 @@
                 };
             }
 
-            // Connect Now button
-            const connectBtn = document.getElementById('connectBtn');
-            if (connectBtn) {
-                connectBtn.onclick = function(e) {
-                    e.preventDefault();
-                    const contactSection = document.getElementById('contact-section');
-                    if (contactSection) {
-                        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    } else {
-                        const firstContact = document.querySelector('.contact-card');
-                        if (firstContact) {
-                            firstContact.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    }
-                };
-            }
         });

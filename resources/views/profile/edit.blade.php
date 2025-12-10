@@ -192,6 +192,38 @@
     .fade-in {
         animation: fadeIn 0.3s ease-out;
     }
+    
+    /* Custom Select with Icons */
+    .custom-select-wrapper {
+        position: relative;
+    }
+    
+    .custom-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        padding-right: 2.5rem;
+        padding-left: 2.5rem;
+    }
+    
+    /* Style options with icons using Unicode/Emoji as fallback since HTML doesn't work in options */
+    .contact-type-select option[value="mobile"]::before { content: "📱 "; }
+    .contact-type-select option[value="whatsapp"]::before { content: "💬 "; }
+    .contact-type-select option[value="email"]::before { content: "✉️ "; }
+    .contact-type-select option[value="website"]::before { content: "🌐 "; }
+    .contact-type-select option[value="telegram"]::before { content: "✈️ "; }
+    
+    .social-platform-select option[value="instagram"]::before { content: "📷 "; }
+    .social-platform-select option[value="facebook"]::before { content: "👥 "; }
+    .social-platform-select option[value="twitter"]::before { content: "🐦 "; }
+    .social-platform-select option[value="linkedin"]::before { content: "💼 "; }
+    .social-platform-select option[value="youtube"]::before { content: "📺 "; }
+    .social-platform-select option[value="tiktok"]::before { content: "🎵 "; }
+    
+    /* Note: CSS ::before doesn't work in option tags, so we'll add icons via JavaScript */
 </style>
 
 <div class="py-8 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
@@ -227,7 +259,7 @@
                     </label>
                     <div class="flex items-center bg-gray-50 rounded-xl p-1 border-2 border-gray-200 focus-within:border-indigo-500 transition">
                         <div class="bg-white text-gray-600 px-4 py-3 rounded-l-lg border-r border-gray-200 font-medium text-sm">
-                            {{ config('app.url') }}/
+                            https://itappdigital.com/
                         </div>
                         <input type="text" name="username" value="{{ old('username', $user->username) }}"
                             class="flex-1 px-4 py-3 bg-transparent border-0 focus:ring-0 text-gray-900 font-medium"
@@ -462,6 +494,18 @@
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-map-marked-alt mr-2 text-indigo-600"></i>Google Maps Link
+                        </label>
+                        <input type="url" name="google_maps_link" value="{{ old('google_maps_link', $profile->google_maps_link) }}"
+                            class="form-input w-full px-4 py-3 rounded-lg"
+                            placeholder="https://maps.google.com/...">
+                        <p class="text-xs text-gray-500 mt-2 flex items-center">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Optional: Google Maps link for your location
+                        </p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
                             <i class="fas fa-align-left mr-2 text-indigo-600"></i>Bio
                         </label>
                         <textarea name="bio" rows="4"
@@ -498,20 +542,55 @@
                         <div class="flex flex-col md:flex-row gap-3">
                             <div class="flex-1">
                                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">Contact Type</label>
-                                <select name="contacts[{{ $index }}][type]" class="form-input w-full px-4 py-2.5 rounded-lg">
-                                    <option value="mobile" {{ $contact->type == 'mobile' ? 'selected' : '' }}>📱 Mobile</option>
-                                    <option value="whatsapp" {{ $contact->type == 'whatsapp' ? 'selected' : '' }}>💬 WhatsApp</option>
-                                    <option value="email" {{ $contact->type == 'email' ? 'selected' : '' }}>✉️ Email</option>
-                                    <option value="website" {{ $contact->type == 'website' ? 'selected' : '' }}>🌐 Website</option>
-                                    <option value="telegram" {{ $contact->type == 'telegram' ? 'selected' : '' }}>✈️ Telegram</option>
-                                </select>
+                                <div class="custom-select-wrapper">
+                                    <select name="contacts[{{ $index }}][type]" class="form-input w-full px-4 py-2.5 rounded-lg contact-type-select custom-select" data-index="{{ $index }}">
+                                        <option value="mobile" {{ $contact->type == 'mobile' ? 'selected' : '' }}>Mobile</option>
+                                        <option value="whatsapp" {{ $contact->type == 'whatsapp' ? 'selected' : '' }}>WhatsApp</option>
+                                        <option value="email" {{ $contact->type == 'email' ? 'selected' : '' }}>Email</option>
+                                        <option value="website" {{ $contact->type == 'website' ? 'selected' : '' }}>Website</option>
+                                        <option value="telegram" {{ $contact->type == 'telegram' ? 'selected' : '' }}>Telegram</option>
+                                    </select>
+                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                        @if($contact->type == 'mobile')
+                                            <i class="fas fa-phone text-indigo-600"></i>
+                                        @elseif($contact->type == 'whatsapp')
+                                            <i class="fab fa-whatsapp text-green-500"></i>
+                                        @elseif($contact->type == 'email')
+                                            <i class="fas fa-envelope text-indigo-600"></i>
+                                        @elseif($contact->type == 'website')
+                                            <i class="fas fa-globe text-indigo-600"></i>
+                                        @elseif($contact->type == 'telegram')
+                                            <i class="fab fa-telegram text-blue-400"></i>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">Contact Value</label>
+                                @php
+                                    $placeholder = 'Enter contact information';
+                                    $displayValue = $contact->value;
+                                    if ($contact->type == 'whatsapp') {
+                                        // If it's already a wa.me link, extract the number for display
+                                        if (strpos($contact->value, 'wa.me/') !== false) {
+                                            $displayValue = preg_replace('/.*wa\.me\/([0-9]+).*/', '$1', $contact->value);
+                                        }
+                                        $placeholder = 'Enter phone number (e.g., 971501234567)';
+                                    } elseif ($contact->type == 'email') {
+                                        $placeholder = 'Enter email address';
+                                    } elseif ($contact->type == 'website') {
+                                        $placeholder = 'Enter website URL';
+                                    } elseif ($contact->type == 'telegram') {
+                                        $placeholder = 'Enter Telegram username';
+                                    } elseif ($contact->type == 'mobile') {
+                                        $placeholder = 'Enter phone number';
+                                    }
+                                @endphp
                                 <input type="text" name="contacts[{{ $index }}][value]"
-                                    value="{{ $contact->value }}"
-                                    class="form-input w-full px-4 py-2.5 rounded-lg"
-                                    placeholder="Enter contact information">
+                                    value="{{ $displayValue }}"
+                                    class="form-input w-full px-4 py-2.5 rounded-lg contact-value-input"
+                                    data-index="{{ $index }}"
+                                    placeholder="{{ $placeholder }}">
                             </div>
                             <div class="flex items-end">
                                 <button type="button" class="btn-danger text-white px-4 py-2.5 rounded-lg font-medium transition"
@@ -548,14 +627,31 @@
                         <div class="flex flex-col md:flex-row gap-3">
                             <div class="flex-1">
                                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">Platform</label>
-                                <select name="socials[{{ $index }}][platform]" class="form-input w-full px-4 py-2.5 rounded-lg">
-                                    <option value="instagram" {{ $social->platform == 'instagram' ? 'selected' : '' }}>📷 Instagram</option>
-                                    <option value="facebook" {{ $social->platform == 'facebook' ? 'selected' : '' }}>👥 Facebook</option>
-                                    <option value="twitter" {{ $social->platform == 'twitter' ? 'selected' : '' }}>🐦 Twitter</option>
-                                    <option value="linkedin" {{ $social->platform == 'linkedin' ? 'selected' : '' }}>💼 LinkedIn</option>
-                                    <option value="youtube" {{ $social->platform == 'youtube' ? 'selected' : '' }}>📺 YouTube</option>
-                                    <option value="tiktok" {{ $social->platform == 'tiktok' ? 'selected' : '' }}>🎵 TikTok</option>
-                                </select>
+                                <div class="custom-select-wrapper">
+                                    <select name="socials[{{ $index }}][platform]" class="form-input w-full px-4 py-2.5 rounded-lg custom-select social-platform-select">
+                                        <option value="instagram" data-icon="fab fa-instagram" data-color="text-pink-500" {{ $social->platform == 'instagram' ? 'selected' : '' }}>📷 Instagram</option>
+                                        <option value="facebook" data-icon="fab fa-facebook" data-color="text-blue-600" {{ $social->platform == 'facebook' ? 'selected' : '' }}>👥 Facebook</option>
+                                        <option value="twitter" data-icon="fab fa-twitter" data-color="text-sky-400" {{ $social->platform == 'twitter' ? 'selected' : '' }}>🐦 Twitter</option>
+                                        <option value="linkedin" data-icon="fab fa-linkedin" data-color="text-blue-700" {{ $social->platform == 'linkedin' ? 'selected' : '' }}>💼 LinkedIn</option>
+                                        <option value="youtube" data-icon="fab fa-youtube" data-color="text-red-600" {{ $social->platform == 'youtube' ? 'selected' : '' }}>📺 YouTube</option>
+                                        <option value="tiktok" data-icon="fab fa-tiktok" data-color="text-black" {{ $social->platform == 'tiktok' ? 'selected' : '' }}>🎵 TikTok</option>
+                                    </select>
+                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                        @if($social->platform == 'instagram')
+                                            <i class="fab fa-instagram text-pink-500"></i>
+                                        @elseif($social->platform == 'facebook')
+                                            <i class="fab fa-facebook text-blue-600"></i>
+                                        @elseif($social->platform == 'twitter')
+                                            <i class="fab fa-twitter text-sky-400"></i>
+                                        @elseif($social->platform == 'linkedin')
+                                            <i class="fab fa-linkedin text-blue-700"></i>
+                                        @elseif($social->platform == 'youtube')
+                                            <i class="fab fa-youtube text-red-600"></i>
+                                        @elseif($social->platform == 'tiktok')
+                                            <i class="fab fa-tiktok text-black"></i>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">URL</label>
@@ -622,6 +718,19 @@
                                 <textarea name="products[{{ $index }}][description]" rows="3"
                                     class="form-input w-full px-4 py-3 rounded-lg resize-none"
                                     placeholder="Describe your product...">{{ $product->description }}</textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class="fas fa-link mr-2 text-indigo-600"></i>Product Link URL
+                                </label>
+                                <input type="url" name="products[{{ $index }}][product_link_url]"
+                                    value="{{ $product->product_link_url }}"
+                                    class="form-input w-full px-4 py-3 rounded-lg"
+                                    placeholder="https://example.com/product">
+                                <p class="text-xs text-gray-500 mt-2 flex items-center">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    Optional: Link to product page or external URL
+                                </p>
                             </div>
                             <div class="flex items-center">
                                 <input type="checkbox" name="products[{{ $index }}][featured]"
@@ -702,18 +811,24 @@
                     <div class="flex flex-col md:flex-row gap-3">
                         <div class="flex-1">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Contact Type</label>
-                            <select name="contacts[${index}][type]" class="form-input w-full px-4 py-2.5 rounded-lg">
-                                <option value="mobile">📱 Mobile</option>
-                                <option value="whatsapp">💬 WhatsApp</option>
-                                <option value="email">✉️ Email</option>
-                                <option value="website">🌐 Website</option>
-                                <option value="telegram">✈️ Telegram</option>
-                            </select>
+                            <div class="custom-select-wrapper">
+                                <select name="contacts[${index}][type]" class="form-input w-full px-4 py-2.5 rounded-lg contact-type-select custom-select" data-index="${index}">
+                                    <option value="mobile" data-icon="fas fa-phone" data-color="text-indigo-600">📱 Mobile</option>
+                                    <option value="whatsapp" data-icon="fab fa-whatsapp" data-color="text-green-500">💬 WhatsApp</option>
+                                    <option value="email" data-icon="fas fa-envelope" data-color="text-indigo-600">✉️ Email</option>
+                                    <option value="website" data-icon="fas fa-globe" data-color="text-indigo-600">🌐 Website</option>
+                                    <option value="telegram" data-icon="fab fa-telegram" data-color="text-blue-400">✈️ Telegram</option>
+                                </select>
+                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon">
+                                    <i class="fas fa-phone text-indigo-600"></i>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex-1">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Contact Value</label>
                             <input type="text" name="contacts[${index}][value]" 
-                                   class="form-input w-full px-4 py-2.5 rounded-lg"
+                                   class="form-input w-full px-4 py-2.5 rounded-lg contact-value-input"
+                                   data-index="${index}"
                                    placeholder="Enter contact information">
                         </div>
                         <div class="flex items-end">
@@ -736,14 +851,19 @@
                     <div class="flex flex-col md:flex-row gap-3">
                         <div class="flex-1">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Platform</label>
-                            <select name="socials[${index}][platform]" class="form-input w-full px-4 py-2.5 rounded-lg">
-                                <option value="instagram">📷 Instagram</option>
-                                <option value="facebook">👥 Facebook</option>
-                                <option value="twitter">🐦 Twitter</option>
-                                <option value="linkedin">💼 LinkedIn</option>
-                                <option value="youtube">📺 YouTube</option>
-                                <option value="tiktok">🎵 TikTok</option>
-                            </select>
+                            <div class="custom-select-wrapper">
+                                <select name="socials[${index}][platform]" class="form-input w-full px-4 py-2.5 rounded-lg custom-select social-platform-select">
+                                    <option value="instagram" data-icon="fab fa-instagram" data-color="text-pink-500">📷 Instagram</option>
+                                    <option value="facebook" data-icon="fab fa-facebook" data-color="text-blue-600">👥 Facebook</option>
+                                    <option value="twitter" data-icon="fab fa-twitter" data-color="text-sky-400">🐦 Twitter</option>
+                                    <option value="linkedin" data-icon="fab fa-linkedin" data-color="text-blue-700">💼 LinkedIn</option>
+                                    <option value="youtube" data-icon="fab fa-youtube" data-color="text-red-600">📺 YouTube</option>
+                                    <option value="tiktok" data-icon="fab fa-tiktok" data-color="text-black">🎵 TikTok</option>
+                                </select>
+                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon">
+                                    <i class="fab fa-instagram text-pink-500"></i>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex-1">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">URL</label>
@@ -792,6 +912,18 @@
                             <textarea name="products[${index}][description]" rows="3"
                                       class="form-input w-full px-4 py-3 rounded-lg resize-none"
                                       placeholder="Describe your product..."></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-link mr-2 text-indigo-600"></i>Product Link URL
+                            </label>
+                            <input type="url" name="products[${index}][product_link_url]" 
+                                   class="form-input w-full px-4 py-3 rounded-lg"
+                                   placeholder="https://example.com/product">
+                            <p class="text-xs text-gray-500 mt-2 flex items-center">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Optional: Link to product page or external URL
+                            </p>
                         </div>
                         <div class="flex items-center">
                             <input type="checkbox" name="products[${index}][featured]" 
@@ -962,6 +1094,116 @@
                     reader.readAsDataURL(file);
                 }
             }
+        });
+
+        // Handle contact type changes and update placeholders + icons
+        document.addEventListener('change', function(e) {
+            if (e.target && e.target.classList.contains('contact-type-select')) {
+                const index = e.target.dataset.index;
+                const contactType = e.target.value;
+                const valueInput = document.querySelector(`input.contact-value-input[data-index="${index}"]`);
+                const selectWrapper = e.target.closest('.custom-select-wrapper');
+                
+                // Update placeholder
+                if (valueInput) {
+                    const placeholders = {
+                        'mobile': 'Enter phone number',
+                        'whatsapp': 'Enter phone number (e.g., 971501234567)',
+                        'email': 'Enter email address',
+                        'website': 'Enter website URL',
+                        'telegram': 'Enter Telegram username'
+                    };
+                    valueInput.placeholder = placeholders[contactType] || 'Enter contact information';
+                }
+                
+                // Update icon - get from selected option's data attributes
+                if (selectWrapper) {
+                    const selectedOption = e.target.options[e.target.selectedIndex];
+                    const iconClass = selectedOption ? selectedOption.getAttribute('data-icon') : '';
+                    const colorClass = selectedOption ? selectedOption.getAttribute('data-color') : '';
+                    
+                    let iconDiv = selectWrapper.querySelector('.select-icon');
+                    if (!iconDiv) {
+                        iconDiv = document.createElement('div');
+                        iconDiv.className = 'absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon';
+                        selectWrapper.appendChild(iconDiv);
+                    }
+                    
+                    if (iconClass) {
+                        iconDiv.innerHTML = `<i class="${iconClass} ${colorClass}"></i>`;
+                    }
+                }
+            }
+            
+            // Handle social platform changes
+            if (e.target && e.target.classList.contains('social-platform-select')) {
+                const platform = e.target.value;
+                const selectWrapper = e.target.closest('.custom-select-wrapper');
+                
+                if (selectWrapper) {
+                    const selectedOption = e.target.options[e.target.selectedIndex];
+                    const iconClass = selectedOption ? selectedOption.getAttribute('data-icon') : '';
+                    const colorClass = selectedOption ? selectedOption.getAttribute('data-color') : '';
+                    
+                    let iconDiv = selectWrapper.querySelector('.select-icon');
+                    if (!iconDiv) {
+                        iconDiv = document.createElement('div');
+                        iconDiv.className = 'absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon';
+                        selectWrapper.appendChild(iconDiv);
+                    }
+                    
+                    if (iconClass) {
+                        iconDiv.innerHTML = `<i class="${iconClass} ${colorClass}"></i>`;
+                    }
+                }
+            }
+        });
+        
+        // Initialize icons on page load
+        document.querySelectorAll('.contact-type-select, .social-platform-select').forEach(function(select) {
+            const selectWrapper = select.closest('.custom-select-wrapper');
+            
+            if (selectWrapper && !selectWrapper.querySelector('.select-icon')) {
+                const selectedOption = select.options[select.selectedIndex];
+                const iconClass = selectedOption ? selectedOption.getAttribute('data-icon') : '';
+                const colorClass = selectedOption ? selectedOption.getAttribute('data-color') : '';
+                
+                if (iconClass) {
+                    const iconDiv = document.createElement('div');
+                    iconDiv.className = 'absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon';
+                    iconDiv.innerHTML = `<i class="${iconClass} ${colorClass}"></i>`;
+                    selectWrapper.appendChild(iconDiv);
+                }
+            }
+        });
+
+        // Convert WhatsApp numbers to links before form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const whatsappSelects = document.querySelectorAll('select.contact-type-select');
+            whatsappSelects.forEach(function(select) {
+                if (select.value === 'whatsapp') {
+                    const index = select.dataset.index;
+                    const valueInput = document.querySelector(`input.contact-value-input[data-index="${index}"]`);
+                    
+                    if (valueInput && valueInput.value) {
+                        let value = valueInput.value.trim();
+                        
+                        // If it's not already a wa.me link, convert it
+                        if (value.indexOf('wa.me/') === -1 && value.indexOf('whatsapp.com') === -1) {
+                            // Extract only numbers
+                            const phoneNumber = value.replace(/[^0-9]/g, '');
+                            if (phoneNumber) {
+                                valueInput.value = 'https://wa.me/' + phoneNumber;
+                            }
+                        } else if (value.indexOf('wa.me/') !== -1) {
+                            // Ensure it has https://
+                            if (value.indexOf('http') === -1) {
+                                valueInput.value = 'https://' + value;
+                            }
+                        }
+                    }
+                }
+            });
         });
     });
 </script>

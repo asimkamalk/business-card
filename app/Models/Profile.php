@@ -14,6 +14,7 @@ class Profile extends Model
         'banner_image',
         'profile_image',
         'location',
+        'google_maps_link',
         'company',
         'position',
         'bio',

@@ -15,6 +15,7 @@ class Product extends Model
         'image',
         'description',
         'price',
+        'product_link_url',
         'featured'
     ];
 
