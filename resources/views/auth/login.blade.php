@@ -10,9 +10,10 @@
         <div class="max-w-md w-full space-y-8">
             <!-- Logo and Header -->
             <div class="text-center fade-in">
-                <a href="{{ route('home') }}" class="inline-flex items-center space-x-2 mb-6 group">
-                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-110">
-                        <i class="fas fa-id-card text-white text-2xl"></i>
+                <a href="{{ route('home') }}" class="inline-flex flex-col items-center justify-center mb-6 group">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <img src="{{ asset('itappdigital_logo.svg') }}" alt="Logo" class="h-16 w-auto group-hover:scale-110 transition-all duration-300">
+                        <span class="text-2xl font-heading font-bold" style="background: linear-gradient(135deg, #784587 0%, #9d5ba8 50%, #784587 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Itapp Digital</span>
                     </div>
                 </a>
                 <h2 class="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-2">

@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'CardPro') }} - {{ $header ?? 'Dashboard' }}</title>
+    <title>Itapp Digital - {{ $header ?? 'Dashboard' }}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('itappdigital_logo.svg') }}">
+    <link rel="alternate icon" href="{{ asset('itappdigital_logo.svg') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

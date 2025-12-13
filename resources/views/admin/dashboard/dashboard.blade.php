@@ -96,6 +96,10 @@
                    class="tab-button px-6 py-3 rounded-xl font-semibold {{ request()->routeIs('admin.users.*') ? 'active' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                     <i class="fas fa-users mr-2"></i> Users
                 </a>
+                <a href="{{ route('admin.social-settings.index') }}" 
+                   class="tab-button px-6 py-3 rounded-xl font-semibold {{ request()->routeIs('admin.social-settings.*') ? 'active' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <i class="fas fa-share-alt mr-2"></i> Social Settings
+                </a>
             </div>
         </div>
         

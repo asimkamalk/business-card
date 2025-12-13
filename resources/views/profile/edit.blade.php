@@ -37,6 +37,8 @@
         margin-bottom: 2rem;
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         transition: all 0.3s ease;
+        position: relative;
+        overflow: visible;
     }
     
     .form-section:hover {
@@ -143,13 +145,19 @@
         border-radius: 12px;
         padding: 1.25rem;
         transition: all 0.3s ease;
+        position: relative;
+        overflow: visible;
     }
     
     .item-card:hover {
         background: #f3f4f6;
         border-color: #d1d5db;
-        transform: translateY(-2px);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Prevent item-card transform when dropdown is open */
+    .item-card:has(.custom-dropdown.open):hover {
+        transform: none;
     }
     
     .product-card {
@@ -209,21 +217,184 @@
         padding-left: 2.5rem;
     }
     
-    /* Style options with icons using Unicode/Emoji as fallback since HTML doesn't work in options */
-    .contact-type-select option[value="mobile"]::before { content: "📱 "; }
-    .contact-type-select option[value="whatsapp"]::before { content: "💬 "; }
-    .contact-type-select option[value="email"]::before { content: "✉️ "; }
-    .contact-type-select option[value="website"]::before { content: "🌐 "; }
-    .contact-type-select option[value="telegram"]::before { content: "✈️ "; }
+    /* Custom Dropdown Styles */
+    .custom-dropdown {
+        position: relative;
+        width: 100%;
+        z-index: 1;
+        display: block;
+    }
     
-    .social-platform-select option[value="instagram"]::before { content: "📷 "; }
-    .social-platform-select option[value="facebook"]::before { content: "👥 "; }
-    .social-platform-select option[value="twitter"]::before { content: "🐦 "; }
-    .social-platform-select option[value="linkedin"]::before { content: "💼 "; }
-    .social-platform-select option[value="youtube"]::before { content: "📺 "; }
-    .social-platform-select option[value="tiktok"]::before { content: "🎵 "; }
+    .custom-dropdown.open {
+        z-index: 10000;
+    }
     
-    /* Note: CSS ::before doesn't work in option tags, so we'll add icons via JavaScript */
+    /* Ensure dropdown doesn't affect layout */
+    .custom-dropdown-options:not(.open) {
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        width: 0 !important;
+        height: 0 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        overflow: hidden !important;
+    }
+    
+    .custom-dropdown-button {
+        width: 100%;
+        padding: 0.625rem 2.5rem 0.625rem 2.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        background: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: border-color 0.15s ease;
+        position: relative;
+        user-select: none;
+    }
+    
+    .custom-dropdown-button:hover {
+        border-color: #9ca3af;
+    }
+    
+    .custom-dropdown-button:active {
+        border-color: #6366f1;
+    }
+    
+    .custom-dropdown-button:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    
+    .custom-dropdown-button .selected-text {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .custom-dropdown-options {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin-top: 0.25rem !important;
+        margin-bottom: 0 !important;
+        padding: 0.25rem 0 !important;
+        background: white;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        z-index: 99999 !important;
+        max-height: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none !important;
+        visibility: hidden;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+    }
+    
+    .custom-dropdown-options.open {
+        display: block !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+    
+    /* Completely hide dropdown when closed - remove from layout flow */
+    .custom-dropdown:not(.open) .custom-dropdown-options {
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        display: none !important;
+    }
+    
+    /* Ensure dropdown options don't affect layout when closed */
+    .custom-dropdown-options:not(.open) {
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+    
+    .custom-dropdown-option {
+        padding: 0.625rem 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: background-color 0.15s ease;
+        user-select: none;
+        border: none;
+        background: transparent;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .custom-dropdown-option:hover {
+        background-color: #f3f4f6;
+    }
+    
+    .custom-dropdown-option:active {
+        background-color: #e5e7eb;
+    }
+    
+    .custom-dropdown-option.selected {
+        background-color: #eff6ff;
+        color: #1e40af;
+    }
+    
+    .custom-dropdown-option.selected:hover {
+        background-color: #dbeafe;
+    }
+    
+    .custom-dropdown-option i {
+        width: 20px;
+        text-align: center;
+    }
+    
+    .custom-dropdown-arrow {
+        transition: transform 0.2s;
+    }
+    
+    .custom-dropdown.open .custom-dropdown-arrow {
+        transform: rotate(180deg);
+    }
+    
+    .custom-dropdown-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
 </style>
 
 <div class="py-8 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
@@ -542,26 +713,48 @@
                         <div class="flex flex-col md:flex-row gap-3">
                             <div class="flex-1">
                                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">Contact Type</label>
-                                <div class="custom-select-wrapper">
-                                    <select name="contacts[{{ $index }}][type]" class="form-input w-full px-4 py-2.5 rounded-lg contact-type-select custom-select" data-index="{{ $index }}">
-                                        <option value="mobile" {{ $contact->type == 'mobile' ? 'selected' : '' }}>Mobile</option>
-                                        <option value="whatsapp" {{ $contact->type == 'whatsapp' ? 'selected' : '' }}>WhatsApp</option>
-                                        <option value="email" {{ $contact->type == 'email' ? 'selected' : '' }}>Email</option>
-                                        <option value="website" {{ $contact->type == 'website' ? 'selected' : '' }}>Website</option>
-                                        <option value="telegram" {{ $contact->type == 'telegram' ? 'selected' : '' }}>Telegram</option>
-                                    </select>
-                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                                        @if($contact->type == 'mobile')
+                                <div class="custom-dropdown" data-type="contact" data-index="{{ $index }}">
+                                    <input type="hidden" name="contacts[{{ $index }}][type]" value="{{ $contact->type }}" class="contact-type-input">
+                                    <button type="button" class="custom-dropdown-button" data-index="{{ $index }}">
+                                        <div class="custom-dropdown-icon">
+                                            @if($contact->type == 'mobile')
+                                                <i class="fas fa-phone text-indigo-600"></i>
+                                            @elseif($contact->type == 'whatsapp')
+                                                <i class="fab fa-whatsapp text-green-500"></i>
+                                            @elseif($contact->type == 'email')
+                                                <i class="fas fa-envelope text-indigo-600"></i>
+                                            @elseif($contact->type == 'website')
+                                                <i class="fas fa-globe text-indigo-600"></i>
+                                            @elseif($contact->type == 'telegram')
+                                                <i class="fab fa-telegram text-blue-400"></i>
+                                            @endif
+                                        </div>
+                                        <span class="selected-text">
+                                            <span class="selected-label">{{ ucfirst($contact->type) }}</span>
+                                        </span>
+                                        <i class="fas fa-chevron-down custom-dropdown-arrow text-gray-400"></i>
+                                    </button>
+                                    <div class="custom-dropdown-options">
+                                        <div class="custom-dropdown-option {{ $contact->type == 'mobile' ? 'selected' : '' }}" data-value="mobile" data-icon="fas fa-phone" data-color="text-indigo-600">
                                             <i class="fas fa-phone text-indigo-600"></i>
-                                        @elseif($contact->type == 'whatsapp')
+                                            <span>Mobile</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $contact->type == 'whatsapp' ? 'selected' : '' }}" data-value="whatsapp" data-icon="fab fa-whatsapp" data-color="text-green-500">
                                             <i class="fab fa-whatsapp text-green-500"></i>
-                                        @elseif($contact->type == 'email')
+                                            <span>WhatsApp</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $contact->type == 'email' ? 'selected' : '' }}" data-value="email" data-icon="fas fa-envelope" data-color="text-indigo-600">
                                             <i class="fas fa-envelope text-indigo-600"></i>
-                                        @elseif($contact->type == 'website')
+                                            <span>Email</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $contact->type == 'website' ? 'selected' : '' }}" data-value="website" data-icon="fas fa-globe" data-color="text-indigo-600">
                                             <i class="fas fa-globe text-indigo-600"></i>
-                                        @elseif($contact->type == 'telegram')
+                                            <span>Website</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $contact->type == 'telegram' ? 'selected' : '' }}" data-value="telegram" data-icon="fab fa-telegram" data-color="text-blue-400">
                                             <i class="fab fa-telegram text-blue-400"></i>
-                                        @endif
+                                            <span>Telegram</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -627,29 +820,54 @@
                         <div class="flex flex-col md:flex-row gap-3">
                             <div class="flex-1">
                                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">Platform</label>
-                                <div class="custom-select-wrapper">
-                                    <select name="socials[{{ $index }}][platform]" class="form-input w-full px-4 py-2.5 rounded-lg custom-select social-platform-select">
-                                        <option value="instagram" data-icon="fab fa-instagram" data-color="text-pink-500" {{ $social->platform == 'instagram' ? 'selected' : '' }}>📷 Instagram</option>
-                                        <option value="facebook" data-icon="fab fa-facebook" data-color="text-blue-600" {{ $social->platform == 'facebook' ? 'selected' : '' }}>👥 Facebook</option>
-                                        <option value="twitter" data-icon="fab fa-twitter" data-color="text-sky-400" {{ $social->platform == 'twitter' ? 'selected' : '' }}>🐦 Twitter</option>
-                                        <option value="linkedin" data-icon="fab fa-linkedin" data-color="text-blue-700" {{ $social->platform == 'linkedin' ? 'selected' : '' }}>💼 LinkedIn</option>
-                                        <option value="youtube" data-icon="fab fa-youtube" data-color="text-red-600" {{ $social->platform == 'youtube' ? 'selected' : '' }}>📺 YouTube</option>
-                                        <option value="tiktok" data-icon="fab fa-tiktok" data-color="text-black" {{ $social->platform == 'tiktok' ? 'selected' : '' }}>🎵 TikTok</option>
-                                    </select>
-                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                                        @if($social->platform == 'instagram')
+                                <div class="custom-dropdown" data-type="social" data-index="{{ $index }}">
+                                    <input type="hidden" name="socials[{{ $index }}][platform]" value="{{ $social->platform }}" class="social-platform-input">
+                                    <button type="button" class="custom-dropdown-button">
+                                        <div class="custom-dropdown-icon">
+                                            @if($social->platform == 'instagram')
+                                                <i class="fab fa-instagram text-pink-500"></i>
+                                            @elseif($social->platform == 'facebook')
+                                                <i class="fab fa-facebook text-blue-600"></i>
+                                            @elseif($social->platform == 'twitter')
+                                                <i class="fab fa-twitter text-sky-400"></i>
+                                            @elseif($social->platform == 'linkedin')
+                                                <i class="fab fa-linkedin text-blue-700"></i>
+                                            @elseif($social->platform == 'youtube')
+                                                <i class="fab fa-youtube text-red-600"></i>
+                                            @elseif($social->platform == 'tiktok')
+                                                <i class="fab fa-tiktok text-black"></i>
+                                            @endif
+                                        </div>
+                                        <span class="selected-text">
+                                            <span class="selected-label">{{ ucfirst($social->platform) }}</span>
+                                        </span>
+                                        <i class="fas fa-chevron-down custom-dropdown-arrow text-gray-400"></i>
+                                    </button>
+                                    <div class="custom-dropdown-options">
+                                        <div class="custom-dropdown-option {{ $social->platform == 'instagram' ? 'selected' : '' }}" data-value="instagram" data-icon="fab fa-instagram" data-color="text-pink-500">
                                             <i class="fab fa-instagram text-pink-500"></i>
-                                        @elseif($social->platform == 'facebook')
+                                            <span>Instagram</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $social->platform == 'facebook' ? 'selected' : '' }}" data-value="facebook" data-icon="fab fa-facebook" data-color="text-blue-600">
                                             <i class="fab fa-facebook text-blue-600"></i>
-                                        @elseif($social->platform == 'twitter')
+                                            <span>Facebook</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $social->platform == 'twitter' ? 'selected' : '' }}" data-value="twitter" data-icon="fab fa-twitter" data-color="text-sky-400">
                                             <i class="fab fa-twitter text-sky-400"></i>
-                                        @elseif($social->platform == 'linkedin')
+                                            <span>Twitter</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $social->platform == 'linkedin' ? 'selected' : '' }}" data-value="linkedin" data-icon="fab fa-linkedin" data-color="text-blue-700">
                                             <i class="fab fa-linkedin text-blue-700"></i>
-                                        @elseif($social->platform == 'youtube')
+                                            <span>LinkedIn</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $social->platform == 'youtube' ? 'selected' : '' }}" data-value="youtube" data-icon="fab fa-youtube" data-color="text-red-600">
                                             <i class="fab fa-youtube text-red-600"></i>
-                                        @elseif($social->platform == 'tiktok')
+                                            <span>YouTube</span>
+                                        </div>
+                                        <div class="custom-dropdown-option {{ $social->platform == 'tiktok' ? 'selected' : '' }}" data-value="tiktok" data-icon="fab fa-tiktok" data-color="text-black">
                                             <i class="fab fa-tiktok text-black"></i>
-                                        @endif
+                                            <span>TikTok</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -811,16 +1029,38 @@
                     <div class="flex flex-col md:flex-row gap-3">
                         <div class="flex-1">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Contact Type</label>
-                            <div class="custom-select-wrapper">
-                                <select name="contacts[${index}][type]" class="form-input w-full px-4 py-2.5 rounded-lg contact-type-select custom-select" data-index="${index}">
-                                    <option value="mobile" data-icon="fas fa-phone" data-color="text-indigo-600">📱 Mobile</option>
-                                    <option value="whatsapp" data-icon="fab fa-whatsapp" data-color="text-green-500">💬 WhatsApp</option>
-                                    <option value="email" data-icon="fas fa-envelope" data-color="text-indigo-600">✉️ Email</option>
-                                    <option value="website" data-icon="fas fa-globe" data-color="text-indigo-600">🌐 Website</option>
-                                    <option value="telegram" data-icon="fab fa-telegram" data-color="text-blue-400">✈️ Telegram</option>
-                                </select>
-                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon">
-                                    <i class="fas fa-phone text-indigo-600"></i>
+                            <div class="custom-dropdown" data-type="contact" data-index="${index}">
+                                <input type="hidden" name="contacts[${index}][type]" value="mobile" class="contact-type-input">
+                                <button type="button" class="custom-dropdown-button" data-index="${index}">
+                                    <div class="custom-dropdown-icon">
+                                        <i class="fas fa-phone text-indigo-600"></i>
+                                    </div>
+                                    <span class="selected-text">
+                                        <span class="selected-label">Mobile</span>
+                                    </span>
+                                    <i class="fas fa-chevron-down custom-dropdown-arrow text-gray-400"></i>
+                                </button>
+                                <div class="custom-dropdown-options">
+                                    <div class="custom-dropdown-option selected" data-value="mobile" data-icon="fas fa-phone" data-color="text-indigo-600">
+                                        <i class="fas fa-phone text-indigo-600"></i>
+                                        <span>Mobile</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="whatsapp" data-icon="fab fa-whatsapp" data-color="text-green-500">
+                                        <i class="fab fa-whatsapp text-green-500"></i>
+                                        <span>WhatsApp</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="email" data-icon="fas fa-envelope" data-color="text-indigo-600">
+                                        <i class="fas fa-envelope text-indigo-600"></i>
+                                        <span>Email</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="website" data-icon="fas fa-globe" data-color="text-indigo-600">
+                                        <i class="fas fa-globe text-indigo-600"></i>
+                                        <span>Website</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="telegram" data-icon="fab fa-telegram" data-color="text-blue-400">
+                                        <i class="fab fa-telegram text-blue-400"></i>
+                                        <span>Telegram</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -829,7 +1069,7 @@
                             <input type="text" name="contacts[${index}][value]" 
                                    class="form-input w-full px-4 py-2.5 rounded-lg contact-value-input"
                                    data-index="${index}"
-                                   placeholder="Enter contact information">
+                                   placeholder="Enter phone number">
                         </div>
                         <div class="flex items-end">
                             <button type="button" class="btn-danger text-white px-4 py-2.5 rounded-lg font-medium transition"
@@ -841,6 +1081,7 @@
                 </div>
             `;
             document.getElementById('contact-section').insertAdjacentHTML('beforeend', newField);
+            initializeCustomDropdown(document.querySelector(`#contact-section .item-card:last-child .custom-dropdown`));
         });
 
         // Social media section
@@ -851,17 +1092,42 @@
                     <div class="flex flex-col md:flex-row gap-3">
                         <div class="flex-1">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Platform</label>
-                            <div class="custom-select-wrapper">
-                                <select name="socials[${index}][platform]" class="form-input w-full px-4 py-2.5 rounded-lg custom-select social-platform-select">
-                                    <option value="instagram" data-icon="fab fa-instagram" data-color="text-pink-500">📷 Instagram</option>
-                                    <option value="facebook" data-icon="fab fa-facebook" data-color="text-blue-600">👥 Facebook</option>
-                                    <option value="twitter" data-icon="fab fa-twitter" data-color="text-sky-400">🐦 Twitter</option>
-                                    <option value="linkedin" data-icon="fab fa-linkedin" data-color="text-blue-700">💼 LinkedIn</option>
-                                    <option value="youtube" data-icon="fab fa-youtube" data-color="text-red-600">📺 YouTube</option>
-                                    <option value="tiktok" data-icon="fab fa-tiktok" data-color="text-black">🎵 TikTok</option>
-                                </select>
-                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon">
-                                    <i class="fab fa-instagram text-pink-500"></i>
+                            <div class="custom-dropdown" data-type="social" data-index="${index}">
+                                <input type="hidden" name="socials[${index}][platform]" value="instagram" class="social-platform-input">
+                                <button type="button" class="custom-dropdown-button">
+                                    <div class="custom-dropdown-icon">
+                                        <i class="fab fa-instagram text-pink-500"></i>
+                                    </div>
+                                    <span class="selected-text">
+                                        <span class="selected-label">Instagram</span>
+                                    </span>
+                                    <i class="fas fa-chevron-down custom-dropdown-arrow text-gray-400"></i>
+                                </button>
+                                <div class="custom-dropdown-options">
+                                    <div class="custom-dropdown-option selected" data-value="instagram" data-icon="fab fa-instagram" data-color="text-pink-500">
+                                        <i class="fab fa-instagram text-pink-500"></i>
+                                        <span>Instagram</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="facebook" data-icon="fab fa-facebook" data-color="text-blue-600">
+                                        <i class="fab fa-facebook text-blue-600"></i>
+                                        <span>Facebook</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="twitter" data-icon="fab fa-twitter" data-color="text-sky-400">
+                                        <i class="fab fa-twitter text-sky-400"></i>
+                                        <span>Twitter</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="linkedin" data-icon="fab fa-linkedin" data-color="text-blue-700">
+                                        <i class="fab fa-linkedin text-blue-700"></i>
+                                        <span>LinkedIn</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="youtube" data-icon="fab fa-youtube" data-color="text-red-600">
+                                        <i class="fab fa-youtube text-red-600"></i>
+                                        <span>YouTube</span>
+                                    </div>
+                                    <div class="custom-dropdown-option" data-value="tiktok" data-icon="fab fa-tiktok" data-color="text-black">
+                                        <i class="fab fa-tiktok text-black"></i>
+                                        <span>TikTok</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -881,6 +1147,7 @@
                 </div>
             `;
             document.getElementById('social-section').insertAdjacentHTML('beforeend', newField);
+            initializeCustomDropdown(document.querySelector(`#social-section .item-card:last-child .custom-dropdown`));
         });
 
         // Product section
@@ -1096,12 +1363,142 @@
             }
         });
 
+        // Custom Dropdown Functionality
+        function initializeCustomDropdown(dropdown) {
+            if (!dropdown) return;
+            
+            const button = dropdown.querySelector('.custom-dropdown-button');
+            const options = dropdown.querySelector('.custom-dropdown-options');
+            const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+            const iconDiv = dropdown.querySelector('.custom-dropdown-icon');
+            const selectedLabel = dropdown.querySelector('.selected-label');
+            
+            if (!button || !options || !hiddenInput) return;
+            
+            // Toggle dropdown
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Close all other dropdowns
+                document.querySelectorAll('.custom-dropdown').forEach(d => {
+                    if (d !== dropdown) {
+                        d.classList.remove('open');
+                        const opts = d.querySelector('.custom-dropdown-options');
+                        if (opts) {
+                            opts.classList.remove('open');
+                            opts.style.cssText = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; display: none !important; visibility: hidden !important; pointer-events: none !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important;';
+                        }
+                    }
+                });
+                
+                const isOpen = dropdown.classList.contains('open');
+                
+                if (isOpen) {
+                    // Close dropdown - completely remove from layout
+                    dropdown.classList.remove('open');
+                    options.classList.remove('open');
+                    const itemCard = dropdown.closest('.item-card');
+                    if (itemCard) {
+                        itemCard.style.transform = '';
+                    }
+                    options.style.cssText = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; display: none !important; visibility: hidden !important; pointer-events: none !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important;';
+                } else {
+                    // Open dropdown
+                    dropdown.classList.add('open');
+                    options.classList.add('open');
+                    const rect = button.getBoundingClientRect();
+                    const itemCard = dropdown.closest('.item-card');
+                    if (itemCard) {
+                        itemCard.style.transform = 'none';
+                    }
+                    options.style.cssText = 'position: absolute !important; top: 100% !important; left: 0 !important; right: 0 !important; margin-top: 0.25rem !important; display: block !important; visibility: visible !important; pointer-events: auto !important; z-index: 99999 !important; width: ' + rect.width + 'px !important; padding: 0.25rem 0 !important; background: white !important; border: 1px solid #d1d5db !important; border-radius: 0.5rem !important; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; max-height: 300px !important; overflow-y: auto !important; overflow-x: hidden !important;';
+                }
+            });
+            
+            // Handle option selection
+            options.querySelectorAll('.custom-dropdown-option').forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const value = this.getAttribute('data-value');
+                    const iconClass = this.getAttribute('data-icon');
+                    const colorClass = this.getAttribute('data-color');
+                    const label = this.querySelector('span').textContent;
+                    
+                    // Update hidden input
+                    hiddenInput.value = value;
+                    
+                    // Update selected label
+                    selectedLabel.textContent = label;
+                    
+                    // Update icon
+                    iconDiv.innerHTML = `<i class="${iconClass} ${colorClass}"></i>`;
+                    
+                    // Update selected state
+                    options.querySelectorAll('.custom-dropdown-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    
+                    // Close dropdown - completely remove from layout
+                    dropdown.classList.remove('open');
+                    options.classList.remove('open');
+                    options.style.cssText = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; display: none !important; visibility: hidden !important; pointer-events: none !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important;';
+                    
+                    // Handle contact type specific logic
+                    if (dropdown.dataset.type === 'contact') {
+                        const index = dropdown.dataset.index;
+                        const itemCard = dropdown.closest('.item-card');
+                        const valueInput = itemCard ? itemCard.querySelector(`input.contact-value-input[data-index="${index}"]`) : null;
+                        
+                        if (valueInput) {
+                            const placeholders = {
+                                'mobile': 'Enter phone number',
+                                'whatsapp': 'Enter phone number (e.g., 971501234567)',
+                                'email': 'Enter email address',
+                                'website': 'Enter website URL',
+                                'telegram': 'Enter Telegram username'
+                            };
+                            valueInput.placeholder = placeholders[value] || 'Enter contact information';
+                        }
+                    }
+                });
+            });
+        }
+        
+        // Initialize all existing custom dropdowns
+        document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+            initializeCustomDropdown(dropdown);
+            // Ensure closed dropdowns are off-screen
+            const options = dropdown.querySelector('.custom-dropdown-options');
+            if (options && !dropdown.classList.contains('open')) {
+                options.style.cssText = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; display: none !important; visibility: hidden !important; pointer-events: none !important; margin: 0 !important; padding: 0 !important; border: none !important;';
+            }
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.custom-dropdown')) {
+                document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('open');
+                    const opts = dropdown.querySelector('.custom-dropdown-options');
+                    if (opts) {
+                        opts.classList.remove('open');
+                        opts.style.cssText = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; display: none !important; visibility: hidden !important; pointer-events: none !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important;';
+                    }
+                });
+            }
+        });
+
         // Handle contact type changes and update placeholders + icons
+        // Handle contact type changes - use event delegation with proper scoping
         document.addEventListener('change', function(e) {
+            // Contact Information section
             if (e.target && e.target.classList.contains('contact-type-select')) {
                 const index = e.target.dataset.index;
                 const contactType = e.target.value;
-                const valueInput = document.querySelector(`input.contact-value-input[data-index="${index}"]`);
+                
+                // Find the value input in the same item-card
+                const itemCard = e.target.closest('.item-card');
+                const valueInput = itemCard ? itemCard.querySelector(`input.contact-value-input[data-index="${index}"]`) : null;
                 const selectWrapper = e.target.closest('.custom-select-wrapper');
                 
                 // Update placeholder
@@ -1122,20 +1519,21 @@
                     const iconClass = selectedOption ? selectedOption.getAttribute('data-icon') : '';
                     const colorClass = selectedOption ? selectedOption.getAttribute('data-color') : '';
                     
-                    let iconDiv = selectWrapper.querySelector('.select-icon');
-                    if (!iconDiv) {
-                        iconDiv = document.createElement('div');
-                        iconDiv.className = 'absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon';
-                        selectWrapper.appendChild(iconDiv);
-                    }
+                    // Remove existing icon divs in this wrapper
+                    const existingIcons = selectWrapper.querySelectorAll('.select-icon');
+                    existingIcons.forEach(icon => icon.remove());
                     
+                    // Create new icon div
                     if (iconClass) {
+                        const iconDiv = document.createElement('div');
+                        iconDiv.className = 'absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon';
                         iconDiv.innerHTML = `<i class="${iconClass} ${colorClass}"></i>`;
+                        selectWrapper.appendChild(iconDiv);
                     }
                 }
             }
             
-            // Handle social platform changes
+            // Handle social platform changes - use proper scoping
             if (e.target && e.target.classList.contains('social-platform-select')) {
                 const platform = e.target.value;
                 const selectWrapper = e.target.closest('.custom-select-wrapper');
@@ -1145,25 +1543,52 @@
                     const iconClass = selectedOption ? selectedOption.getAttribute('data-icon') : '';
                     const colorClass = selectedOption ? selectedOption.getAttribute('data-color') : '';
                     
-                    let iconDiv = selectWrapper.querySelector('.select-icon');
-                    if (!iconDiv) {
-                        iconDiv = document.createElement('div');
-                        iconDiv.className = 'absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon';
-                        selectWrapper.appendChild(iconDiv);
-                    }
+                    // Remove existing icon divs in this wrapper
+                    const existingIcons = selectWrapper.querySelectorAll('.select-icon');
+                    existingIcons.forEach(icon => icon.remove());
                     
+                    // Create new icon div
                     if (iconClass) {
+                        const iconDiv = document.createElement('div');
+                        iconDiv.className = 'absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon';
                         iconDiv.innerHTML = `<i class="${iconClass} ${colorClass}"></i>`;
+                        selectWrapper.appendChild(iconDiv);
                     }
                 }
             }
         });
         
-        // Initialize icons on page load
-        document.querySelectorAll('.contact-type-select, .social-platform-select').forEach(function(select) {
+        // Initialize icons on page load - separate for contact and social to avoid conflicts
+        document.querySelectorAll('.contact-type-select').forEach(function(select) {
             const selectWrapper = select.closest('.custom-select-wrapper');
             
-            if (selectWrapper && !selectWrapper.querySelector('.select-icon')) {
+            // Remove any existing icons first
+            if (selectWrapper) {
+                const existingIcons = selectWrapper.querySelectorAll('.select-icon');
+                existingIcons.forEach(icon => icon.remove());
+                
+                const selectedOption = select.options[select.selectedIndex];
+                const iconClass = selectedOption ? selectedOption.getAttribute('data-icon') : '';
+                const colorClass = selectedOption ? selectedOption.getAttribute('data-color') : '';
+                
+                if (iconClass) {
+                    const iconDiv = document.createElement('div');
+                    iconDiv.className = 'absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none select-icon';
+                    iconDiv.innerHTML = `<i class="${iconClass} ${colorClass}"></i>`;
+                    selectWrapper.appendChild(iconDiv);
+                }
+            }
+        });
+        
+        // Initialize social platform icons separately
+        document.querySelectorAll('.social-platform-select').forEach(function(select) {
+            const selectWrapper = select.closest('.custom-select-wrapper');
+            
+            // Remove any existing icons first
+            if (selectWrapper) {
+                const existingIcons = selectWrapper.querySelectorAll('.select-icon');
+                existingIcons.forEach(icon => icon.remove());
+                
                 const selectedOption = select.options[select.selectedIndex];
                 const iconClass = selectedOption ? selectedOption.getAttribute('data-icon') : '';
                 const colorClass = selectedOption ? selectedOption.getAttribute('data-color') : '';
@@ -1179,6 +1604,36 @@
 
         // Convert WhatsApp numbers to links before form submission
         document.querySelector('form').addEventListener('submit', function(e) {
+            // Handle custom dropdowns
+            document.querySelectorAll('.custom-dropdown[data-type="contact"]').forEach(function(dropdown) {
+                const hiddenInput = dropdown.querySelector('input.contact-type-input');
+                const index = dropdown.dataset.index;
+                
+                if (hiddenInput && hiddenInput.value === 'whatsapp') {
+                    const itemCard = dropdown.closest('.item-card');
+                    const valueInput = itemCard ? itemCard.querySelector(`input.contact-value-input[data-index="${index}"]`) : null;
+                    
+                    if (valueInput && valueInput.value) {
+                        let value = valueInput.value.trim();
+                        
+                        // If it's not already a wa.me link, convert it
+                        if (value.indexOf('wa.me/') === -1 && value.indexOf('whatsapp.com') === -1) {
+                            // Extract only numbers
+                            const phoneNumber = value.replace(/[^0-9]/g, '');
+                            if (phoneNumber) {
+                                valueInput.value = 'https://wa.me/' + phoneNumber;
+                            }
+                        } else if (value.indexOf('wa.me/') !== -1) {
+                            // Ensure it has https://
+                            if (value.indexOf('http') === -1) {
+                                valueInput.value = 'https://' + value;
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Also handle any remaining select elements (backward compatibility)
             const whatsappSelects = document.querySelectorAll('select.contact-type-select');
             whatsappSelects.forEach(function(select) {
                 if (select.value === 'whatsapp') {

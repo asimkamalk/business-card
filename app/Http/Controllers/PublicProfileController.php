@@ -10,6 +10,18 @@ class PublicProfileController extends Controller
     public function show($username)
     {
         $user = User::where('username', $username)->firstOrFail();
+        
+        // Check if user is suspended
+        if ($user->status === 'suspended') {
+            return view('public.profile', [
+                'user' => $user,
+                'profile' => $user->profile,
+                'qrcodeSvg' => null,
+                'profileUrl' => null,
+                'suspended' => true
+            ]);
+        }
+        
         $profile = $user->profile;
         
         // Load profile with relationships

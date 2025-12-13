@@ -41,11 +41,43 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Check if email is blacklisted
+        $email = $this->input('email');
+        if (\App\Models\BlacklistedEmail::where('email', $email)->exists()) {
+            throw ValidationException::withMessages([
+                'email' => 'Your account has been deleted. Please contact support if you believe this is an error.',
+            ]);
+        }
+
+        // Check if user exists and is not soft deleted
+        $user = \App\Models\User::where('email', $email)->first();
+        if ($user && $user->trashed()) {
+            // Add to blacklist if not already there
+            \App\Models\BlacklistedEmail::firstOrCreate(['email' => $email], [
+                'reason' => 'User account deleted'
+            ]);
+            throw ValidationException::withMessages([
+                'email' => 'Your account has been deleted. Please contact support if you believe this is an error.',
+            ]);
+        }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
+            ]);
+        }
+
+        // Check if user is suspended
+        $authenticatedUser = Auth::user();
+        if ($authenticatedUser && $authenticatedUser->status === 'suspended') {
+            Auth::logout();
+            $this->session()->invalidate();
+            $this->session()->regenerateToken();
+            
+            throw ValidationException::withMessages([
+                'email' => 'Your account has been suspended. Please contact support for assistance.',
             ]);
         }
 

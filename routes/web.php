@@ -20,11 +20,20 @@ Route::get('/', function () {
         ->orderBy('created_at', 'desc')
         ->take(6)
         ->get();
-    return view('welcome', compact('products', 'adminProducts'));
+    $socialSettings = \App\Models\SocialSetting::where('is_active', true)->first();
+    // If no active setting, get the first one anyway (for development)
+    if (!$socialSettings) {
+        $socialSettings = \App\Models\SocialSetting::first();
+    }
+    return view('welcome', compact('products', 'adminProducts', 'socialSettings'));
 })->name('home');
 
 // Public products page
 Route::get('/all-products', [\App\Http\Controllers\PublicProductController::class, 'index'])->name('products.all');
+
+// Privacy and Policy pages
+Route::get('/privacy', [\App\Http\Controllers\PrivacyPolicyController::class, 'privacy'])->name('privacy');
+Route::get('/policy', [\App\Http\Controllers\PrivacyPolicyController::class, 'policy'])->name('policy');
 
 // Public order routes
 Route::get('/products/{productId}/order', [\App\Http\Controllers\OrderController::class, 'create'])->name('orders.create');
@@ -64,6 +73,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('orders/{id}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
     Route::post('orders/{id}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.update-status');
     Route::delete('orders/{id}', [\App\Http\Controllers\Admin\OrderController::class, 'destroy'])->name('orders.destroy');
+    
+    // Social Settings
+    Route::get('social-settings', [\App\Http\Controllers\Admin\SocialSettingController::class, 'index'])->name('social-settings.index');
+    Route::put('social-settings', [\App\Http\Controllers\Admin\SocialSettingController::class, 'update'])->name('social-settings.update');
 });
 
 // Public product view route (must be before catch-all)

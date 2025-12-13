@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ $user->name }}'s digital business card">
-    <title>{{ $user->name }}'s Business Card</title>
+    <title>{{ $user->name }}'s Business Card - Itapp Digital</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('itappdigital_logo.svg') }}">
+    <link rel="alternate icon" href="{{ asset('itappdigital_logo.svg') }}">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     @php
-        $theme = $profile->theme ?? 'modern';
+        $theme = ($profile && $profile->theme) ? $profile->theme : 'modern';
         $themeFonts = [
             'modern' => 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap',
             'classic' => 'https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap',
@@ -29,7 +33,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     @php
-        $theme = $profile->theme ?? 'modern';
+        $theme = ($profile && $profile->theme) ? $profile->theme : 'modern';
         $themeStyles = [
             'modern' => [
                 'body' => 'background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 50%, #f5f3ff 100%);',
@@ -360,57 +364,78 @@
     </script>
 </head>
 <body class="font-sans antialiased min-h-screen">
-    <!-- Banner Header -->
-    <div class="h-48 bg-gray-100">
-        @php
-            $hasBanner = $profile && $profile->banner_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->banner_image) && !\Illuminate\Support\Str::contains($profile->banner_image, 'default-banner');
-        @endphp
-        @if($hasBanner)
-            <img src="{{ asset('storage/' . $profile->banner_image) }}" 
-                 class="w-full h-full object-cover"
-                 style="max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: cover;"
-                 alt="Banner">
-        @endif
-    </div>
-
-    <!-- Profile Section - Centered -->
-    <div class="px-4 pb-8 max-w-2xl mx-auto">
-        <!-- Profile Image - Centered below header (no overlap) -->
-        <div class="flex justify-center mt-8 mb-6">
-            @php
-                $hasProfile = $profile && $profile->profile_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->profile_image) && !\Illuminate\Support\Str::contains($profile->profile_image, 'default-avatar');
-            @endphp
-            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl" style="width: 128px; height: 128px; flex-shrink: 0;">
-                @if($hasProfile)
-                    <img src="{{ asset('storage/' . $profile->profile_image) }}" 
-                         class="w-full h-full object-cover bg-white"
-                         style="width: 100%; height: 100%; object-fit: cover;"
-                         alt="{{ $user->name }}">
-                @else
-                    <div class="w-full h-full bg-gray-300 flex items-center justify-center">
-                        <i class="fas fa-user text-gray-500 text-4xl"></i>
+    @if(isset($suspended) && $suspended)
+        <!-- Suspended Account - Show Only Warning -->
+        <div class="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-gray-50 to-gray-100">
+            <div class="max-w-md w-full">
+                <div class="bg-white border-l-4 border-red-500 p-8 rounded-lg shadow-xl">
+                    <div class="flex items-start mb-6">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle text-red-600 text-4xl"></i>
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">
+                                Account Suspended
+                            </h3>
+                            <p class="text-base text-gray-700 leading-relaxed">
+                                This account has been suspended. Please contact support if you believe this is an error.
+                            </p>
+                        </div>
                     </div>
-                @endif
+                    <div class="mt-6">
+                        <a href="{{ route('home') }}" 
+                           class="inline-flex items-center justify-center w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg">
+                            <i class="fas fa-home mr-2"></i>
+                            Go to Home
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Profile info -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold font-heading {{ $currentTheme['heading'] }} mb-1">{{ $user->name }}</h1>
-            <div class="flex flex-col md:flex-row md:justify-center md:space-x-4 space-y-2 md:space-y-0">
-                <span class="text-lg font-medium {{ $currentTheme['text'] }}">{{ $profile->position ?? 'Business Owner' }}</span>
-                <span class="{{ $currentTheme['secondaryText'] }}">•</span>
-                <span class="text-lg {{ $currentTheme['bodyText'] }}">{{ $profile->company ?? 'Company Name' }}</span>
+    @else
+        <!-- Banner Header -->
+        <div class="h-48 bg-gray-100">
+            @php
+                $hasBanner = $profile && $profile->banner_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->banner_image) && !\Illuminate\Support\Str::contains($profile->banner_image, 'default-banner');
+            @endphp
+            @if($hasBanner)
+                <img src="{{ asset('storage/' . $profile->banner_image) }}" 
+                     class="w-full h-full object-cover"
+                     style="max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: cover;"
+                     alt="Banner">
+            @endif
+        </div>
+
+        <!-- Profile Section - Centered -->
+        <div class="px-4 pb-8 max-w-2xl mx-auto">
+            <!-- Profile Image - Centered below header (no overlap) -->
+            <div class="flex justify-center mt-8 mb-6">
+                @php
+                    $hasProfile = $profile && $profile->profile_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($profile->profile_image) && !\Illuminate\Support\Str::contains($profile->profile_image, 'default-avatar');
+                @endphp
+                <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl" style="width: 128px; height: 128px; flex-shrink: 0;">
+                    @if($hasProfile)
+                        <img src="{{ asset('storage/' . $profile->profile_image) }}" 
+                             class="w-full h-full object-cover bg-white"
+                             style="width: 100%; height: 100%; object-fit: cover;"
+                             alt="{{ $user->name }}">
+                    @else
+                        <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                            <i class="fas fa-user text-gray-500 text-4xl"></i>
+                        </div>
+                    @endif
+                </div>
             </div>
-            <p class="{{ $currentTheme['bodyText'] }} mt-2 max-w-md mx-auto">{{ $profile->bio ?? 'Welcome to my digital business card. Connect with me through any of the channels below.' }}</p>
-        </div>
-        
-            <div class="flex justify-center mb-8">
-            <a href="{{ route('public.vcard', $user->username) }}" 
-               id="connectBtn" 
-               class="theme-button flex items-center {{ $currentTheme['button'] }} text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl no-underline">
-                <i class="fas fa-save mr-2"></i> SAVE CONTACT
-            </a>
-        </div>
+            <!-- Profile info -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold font-heading {{ $currentTheme['heading'] }} mb-1">{{ $user->name }}</h1>
+                <div class="flex flex-col md:flex-row md:justify-center md:space-x-4 space-y-2 md:space-y-0">
+                    <span class="text-lg font-medium {{ $currentTheme['text'] }}">{{ $profile->position ?? 'Business Owner' }}</span>
+                    <span class="{{ $currentTheme['secondaryText'] }}">•</span>
+                    <span class="text-lg {{ $currentTheme['bodyText'] }}">{{ $profile->company ?? 'Company Name' }}</span>
+                </div>
+                <p class="{{ $currentTheme['bodyText'] }} mt-2 max-w-md mx-auto">{{ $profile->bio ?? 'Welcome to my digital business card. Connect with me through any of the channels below.' }}</p>
+            </div>
 
         <!-- Social Media -->
         @if($profile && $profile->socialMedia && $profile->socialMedia->count() > 0)
@@ -587,21 +612,29 @@
         @endif
 
         <!-- Action Buttons -->
-        <div class="fixed bottom-6 right-6 flex flex-col space-y-4 z-50">
+        <div class="fixed bottom-6 right-6 flex flex-col space-y-3 z-50">
+            <!-- Save Contact Button -->
+            <a href="{{ route('public.vcard', $user->username) }}" 
+               id="connectBtn" 
+               class="{{ $currentTheme['button'] }} text-white p-3 rounded-full shadow-lg hover:shadow-xl transition transform hover:scale-110 no-underline flex items-center justify-center"
+               title="Save Contact">
+                <i class="fas fa-save text-lg"></i>
+            </a>
+            
             <!-- Share Button -->
             <button id="shareBtn" 
                     type="button"
                     onclick="handleShare()"
-                    class="bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-110 cursor-pointer">
-                <i class="fas fa-share-alt text-xl"></i>
+                    class="bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-110 cursor-pointer">
+                <i class="fas fa-share-alt text-lg"></i>
             </button>
             
             <!-- QR Code Button -->
             <button id="qrBtn" 
                     type="button"
                     onclick="handleQRCode()"
-                    class="{{ $currentTheme['button'] }} text-white p-4 rounded-full shadow-lg transition transform hover:scale-110 cursor-pointer">
-                <i class="fas fa-qrcode text-xl"></i>
+                    class="{{ $currentTheme['button'] }} text-white p-3 rounded-full shadow-lg transition transform hover:scale-110 cursor-pointer">
+                <i class="fas fa-qrcode text-lg"></i>
             </button>
         </div>
     </div>
@@ -661,3 +694,7 @@
             }
 
         });
+    </script>
+@endif
+</body>
+</html>

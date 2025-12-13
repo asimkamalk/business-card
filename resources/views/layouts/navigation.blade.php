@@ -5,11 +5,9 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ auth()->check() && auth()->user()->is_admin ? route('admin.dashboard') : (auth()->check() ? route('dashboard') : route('home')) }}" class="flex items-center space-x-2 group">
-                        <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110">
-                            <i class="fas fa-id-card text-white text-xl"></i>
-                        </div>
-                        <span class="text-2xl font-heading font-bold gradient-text">CardPro</span>
+                    <a href="{{ auth()->check() && auth()->user()->is_admin ? route('admin.dashboard') : (auth()->check() ? route('dashboard') : route('home')) }}" class="flex items-center space-x-3 group">
+                        <img src="{{ asset('itappdigital_logo.svg') }}" alt="Logo" class="h-10 w-auto group-hover:scale-110 transition-all duration-300">
+                        <span class="text-xl font-heading font-bold" style="background: linear-gradient(135deg, #784587 0%, #9d5ba8 50%, #784587 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Itapp Digital</span>
                     </a>
                 </div>
 

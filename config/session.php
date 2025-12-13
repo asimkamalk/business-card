@@ -156,7 +156,7 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN'),
+    'domain' => env('SESSION_DOMAIN', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -169,7 +169,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -200,6 +200,16 @@ return [
     */
 
     'same_site' => env('SESSION_SAME_SITE', 'lax'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Session Cookie Same-Site for Local Development
+    |--------------------------------------------------------------------------
+    |
+    | For localhost development, we may need to adjust SameSite settings
+    | to ensure cookies work properly.
+    |
+    */
 
     /*
     |--------------------------------------------------------------------------

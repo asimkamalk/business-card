@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Create your beautiful digital business card in minutes. Professional, customizable business cards that showcase your brand and make connecting effortless.">
     <meta name="keywords" content="digital business card, virtual business card, NFC card, QR code business card, online business card">
-    <meta name="author" content="CardPro">
-    <meta property="og:title" content="CardPro - Digital Business Card Maker">
+    <meta name="author" content="Itapp Digital">
+    <meta property="og:title" content="Itapp Digital - Digital Business Card Maker">
     <meta property="og:description" content="Create your beautiful digital business card in minutes. Professional, customizable business cards.">
     <meta property="og:type" content="website">
-    <title>CardPro - Create Your Digital Business Card in Minutes</title>
+    <title>Itapp Digital - Create Your Digital Business Card in Minutes</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('itappdigital_logo.svg') }}">
+    <link rel="alternate icon" href="{{ asset('itappdigital_logo.svg') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -318,15 +322,72 @@
 </head>
 
 <body class="bg-white dark:bg-slate-900">
+    @if(isset($socialSettings) && $socialSettings)
+        <!-- Social Links and Phone Bar (Above Navbar) -->
+        <div class="fixed top-0 left-0 right-0 z-[60] bg-gray-900 text-white py-2 px-4 hidden md:block">
+            <div class="max-w-7xl mx-auto flex justify-between items-center text-sm">
+                <div class="flex items-center space-x-6">
+                    @if($socialSettings->phone)
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $socialSettings->phone) }}" class="flex items-center hover:text-indigo-400 transition">
+                            <i class="fas fa-phone mr-2"></i>
+                            <span>{{ $socialSettings->phone }}</span>
+                        </a>
+                    @endif
+                    @if($socialSettings->facebook)
+                        <a href="{{ $socialSettings->facebook }}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition">
+                            <i class="fab fa-facebook text-lg"></i>
+                        </a>
+                    @endif
+                    @if($socialSettings->instagram)
+                        <a href="{{ $socialSettings->instagram }}" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition">
+                            <i class="fab fa-instagram text-lg"></i>
+                        </a>
+                    @endif
+                    @if($socialSettings->twitter)
+                        <a href="{{ $socialSettings->twitter }}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                    @endif
+                    @if($socialSettings->linkedin)
+                        <a href="{{ $socialSettings->linkedin }}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition">
+                            <i class="fab fa-linkedin text-lg"></i>
+                        </a>
+                    @endif
+                    @if($socialSettings->youtube)
+                        <a href="{{ $socialSettings->youtube }}" target="_blank" rel="noopener noreferrer" class="hover:text-red-500 transition">
+                            <i class="fab fa-youtube text-lg"></i>
+                        </a>
+                    @endif
+                    @if($socialSettings->tiktok)
+                        <a href="{{ $socialSettings->tiktok }}" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">
+                            <i class="fab fa-tiktok text-lg"></i>
+                        </a>
+                    @endif
+                </div>
+                @if(!empty(trim($socialSettings->bio)))
+                    <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center">
+                        <span class="text-sm text-white hover:text-indigo-400 transition">{{ trim($socialSettings->bio) }}</span>
+                    </div>
+                @endif
+                <div class="flex items-center">
+                    @if($socialSettings->email)
+                        <a href="mailto:{{ $socialSettings->email }}" class="flex items-center hover:text-indigo-400 transition">
+                            <i class="fas fa-envelope mr-2"></i>
+                            <span>{{ $socialSettings->email }}</span>
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 nav-blur shadow-sm">
+    <nav class="fixed left-0 right-0 z-50 nav-blur shadow-sm {{ isset($socialSettings) && $socialSettings ? 'top-10' : 'top-0' }}">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-id-card text-white text-xl"></i>
-                    </div>
-                    <span class="text-2xl font-heading font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">CardPro</span>
+                <div class="flex items-center space-x-3">
+                    <img src="{{ asset('itappdigital_logo.svg') }}" alt="Logo" class="h-10 w-auto">
+                    <span class="text-xl font-heading font-bold" style="background: linear-gradient(135deg, #784587 0%, #9d5ba8 50%, #784587 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Itapp Digital</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="#features" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">Features</a>
@@ -369,7 +430,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="hero" class="hero-gradient text-white pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden hero-section scroll-mt-20">
+    <section id="hero" class="hero-gradient text-white pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden hero-section scroll-mt-20 {{ isset($socialSettings) && $socialSettings ? 'mt-10' : '' }}">
         <div class="absolute inset-0 pattern-dots opacity-20"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid md:grid-cols-2 gap-12 items-center">
@@ -744,7 +805,7 @@
                     Loved by <span class="gradient-text">Thousands</span>
                 </h2>
                 <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                    See what our users are saying about CardPro
+                    See what our users are saying about Itapp Digital
                 </p>
             </div>
 
@@ -767,7 +828,7 @@
                         <i class="fas fa-star"></i>
                     </div>
                     <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        "CardPro has completely transformed how I network. The QR code feature is a game-changer at events. I've made more meaningful connections in the past month than in the previous year!"
+                        "Itapp Digital has completely transformed how I network. The QR code feature is a game-changer at events. I've made more meaningful connections in the past month than in the previous year!"
                     </p>
                 </div>
 
@@ -935,7 +996,7 @@
                 Ready to Create Your Stunning Digital Business Card?
             </h2>
             <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-                Join thousands of professionals who are making connections effortlessly with CardPro. Get started in minutes, no credit card required.
+                Join thousands of professionals who are making connections effortlessly with Itapp Digital. Get started in minutes, no credit card required.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="{{ route('register') }}" class="bg-white text-indigo-700 hover:bg-gray-100 px-8 py-4 rounded-xl font-bold text-lg inline-flex items-center justify-center shadow-xl transition-all duration-300">
@@ -954,63 +1015,31 @@
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-400 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
                 <div>
-                    <div class="flex items-center space-x-2 mb-6">
-                        <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-id-card text-white text-xl"></i>
-                        </div>
-                        <span class="text-2xl font-heading font-bold text-white">CardPro</span>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <img src="{{ asset('itappdigital_logo.svg') }}" alt="Logo" class="h-10 w-auto">
+                        <span class="text-xl font-heading font-bold text-white" style="background: linear-gradient(135deg, #b88cc8 0%, #d4a5e0 50%, #b88cc8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Itapp Digital</span>
                     </div>
                     <p class="mb-6 leading-relaxed">
                         Create beautiful digital business cards that leave a lasting impression. Connect effortlessly with professionals worldwide.
                     </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-indigo-600 flex items-center justify-center transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-indigo-600 flex items-center justify-center transition">
-                            <i class="fab fa-facebook"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-indigo-600 flex items-center justify-center transition">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-indigo-600 flex items-center justify-center transition">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                    </div>
                 </div>
 
                 <div>
-                    <h3 class="text-white font-bold text-lg mb-6">Product</h3>
+                    <h3 class="text-white font-bold text-lg mb-6">Quick Links</h3>
                     <ul class="space-y-3">
                         <li><a href="#features" class="hover:text-white transition">Features</a></li>
                         <li><a href="#how-it-works" class="hover:text-white transition">How It Works</a></li>
-                        <li><a href="#" class="hover:text-white transition">Templates</a></li>
-                        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
-                        <li><a href="#" class="hover:text-white transition">Integrations</a></li>
+                        <li><a href="{{ route('products.all') }}" class="hover:text-white transition">All Products</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-white font-bold text-lg mb-6">Company</h3>
+                    <h3 class="text-white font-bold text-lg mb-6">Legal</h3>
                     <ul class="space-y-3">
-                        <li><a href="#" class="hover:text-white transition">About Us</a></li>
-                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
-                        <li><a href="#" class="hover:text-white transition">Careers</a></li>
-                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
-                        <li><a href="#" class="hover:text-white transition">Press Kit</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-white font-bold text-lg mb-6">Support</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="hover:text-white transition">Help Center</a></li>
-                        <li><a href="#" class="hover:text-white transition">Documentation</a></li>
-                        <li><a href="#" class="hover:text-white transition">Tutorials</a></li>
-                        <li><a href="#" class="hover:text-white transition">API Docs</a></li>
-                        <li><a href="#" class="hover:text-white transition">Status</a></li>
+                        <li><a href="{{ route('privacy') }}" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="{{ route('policy') }}" class="hover:text-white transition">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
@@ -1018,11 +1047,10 @@
             <div class="section-divider mb-8"></div>
 
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <p class="mb-4 md:mb-0">&copy; {{ date('Y') }} CardPro. All rights reserved.</p>
+                <p class="mb-4 md:mb-0">&copy; {{ date('Y') }} ITApp Digital. All rights reserved.</p>
                 <div class="flex space-x-6 text-sm">
-                    <a href="#" class="hover:text-white transition">Privacy Policy</a>
-                    <a href="#" class="hover:text-white transition">Terms of Service</a>
-                    <a href="#" class="hover:text-white transition">Cookie Policy</a>
+                    <a href="{{ route('privacy') }}" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="{{ route('policy') }}" class="hover:text-white transition">Terms of Service</a>
                 </div>
             </div>
         </div>
@@ -1147,6 +1175,30 @@
             lastScroll = currentScroll;
         });
     </script>
+
+    @if(isset($socialSettings) && $socialSettings && $socialSettings->whatsapp)
+        <!-- WhatsApp Floating Button (Bottom Right) -->
+        @php
+            $whatsappNumber = $socialSettings->whatsapp;
+            // If it's already a wa.me link, use it directly
+            if (strpos($whatsappNumber, 'wa.me/') !== false || strpos($whatsappNumber, 'whatsapp.com') !== false) {
+                $whatsappUrl = (strpos($whatsappNumber, 'http') === 0 ? '' : 'https://') . $whatsappNumber;
+            } else {
+                // Extract phone number and create wa.me link
+                $phoneNumber = preg_replace('/[^0-9]/', '', $whatsappNumber);
+                $whatsappUrl = 'https://wa.me/' . $phoneNumber;
+            }
+        @endphp
+        <a href="{{ $whatsappUrl }}" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center w-14 h-14 rounded-full"
+           style="aspect-ratio: 1/1;"
+           aria-label="Contact us on WhatsApp"
+           title="Contact us on WhatsApp">
+            <i class="fab fa-whatsapp text-2xl"></i>
+        </a>
+    @endif
 </body>
 
 </html>
