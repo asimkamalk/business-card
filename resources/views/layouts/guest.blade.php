@@ -20,7 +20,20 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @php
+            try {
+                $viteManifest = public_path('build/manifest.json');
+                if (file_exists($viteManifest)) {
+                    echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']);
+                } else {
+                    // Fallback: Load Alpine.js via CDN if Vite manifest doesn't exist
+                    echo '<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>';
+                }
+            } catch (\Exception $e) {
+                // Fallback: Load Alpine.js via CDN if Vite fails
+                echo '<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>';
+            }
+        @endphp
 
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
