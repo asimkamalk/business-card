@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Notifications\AccountCreatedNotification;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -36,6 +37,9 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        // Send account created notification
+        $user->notify(new AccountCreatedNotification());
 
         Auth::login($user);
 

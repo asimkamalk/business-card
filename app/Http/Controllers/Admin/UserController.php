@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\BlacklistedEmail;
+use App\Notifications\AccountStatusChangedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -55,6 +57,9 @@ class UserController extends Controller
 
         $user->update(['status' => 'suspended']);
 
+        // Send status change notification
+        $user->notify(new AccountStatusChangedNotification('suspended'));
+
         Log::info('User suspended', [
             'user_id' => $user->id,
             'suspended_by' => auth()->id(),
@@ -80,6 +85,9 @@ class UserController extends Controller
         // Update status to active
         $user->update(['status' => 'active']);
 
+        // Send status change notification
+        $user->notify(new AccountStatusChangedNotification('active'));
+
         Log::info('User restored', [
             'user_id' => $user->id,
             'restored_by' => auth()->id(),
@@ -96,12 +104,22 @@ class UserController extends Controller
             return back()->with('error', 'Cannot delete an admin user.');
         }
 
+        $email = $user->email;
+        
+        // Send status change notification before deletion
+        $user->notify(new AccountStatusChangedNotification('deleted', 'Account deleted by administrator'));
+        
         $user->delete();
+
+        // Add email to blacklist
+        BlacklistedEmail::firstOrCreate(['email' => $email], [
+            'reason' => 'User account deleted by admin'
+        ]);
 
         Log::info('User soft deleted', [
             'user_id' => $user->id,
             'deleted_by' => auth()->id(),
-            'email' => $user->email
+            'email' => $email
         ]);
 
         return redirect()->route('admin.users.index')
@@ -147,17 +165,20 @@ class UserController extends Controller
                 case 'suspend':
                     if ($user->status !== 'suspended') {
                         $user->update(['status' => 'suspended']);
+                        $user->notify(new AccountStatusChangedNotification('suspended'));
                         $count++;
                     }
                     break;
                 case 'activate':
                     if ($user->status !== 'active') {
                         $user->update(['status' => 'active']);
+                        $user->notify(new AccountStatusChangedNotification('active'));
                         $count++;
                     }
                     break;
                 case 'delete':
                     if (!$user->trashed()) {
+                        $user->notify(new AccountStatusChangedNotification('deleted', 'Account deleted by administrator'));
                         $user->delete();
                         $count++;
                     }
@@ -166,6 +187,7 @@ class UserController extends Controller
                     if ($user->trashed()) {
                         $user->restore();
                         $user->update(['status' => 'active']);
+                        $user->notify(new AccountStatusChangedNotification('active'));
                         $count++;
                     }
                     break;

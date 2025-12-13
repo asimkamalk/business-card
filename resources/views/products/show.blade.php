@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $product->name }} - CardPro</title>
+    <title>{{ $product->name }} - Itapp Digital</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('itappdigital_logo.svg') }}">
+    <link rel="alternate icon" href="{{ asset('itappdigital_logo.svg') }}">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,11 +58,9 @@
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-id-card text-white text-xl"></i>
-                    </div>
-                    <span class="text-2xl font-heading font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">CardPro</span>
+                <a href="{{ route('home') }}" class="flex items-center space-x-3">
+                    <img src="{{ asset('itappdigital_logo.svg') }}" alt="Logo" class="h-10 w-auto">
+                    <span class="text-xl font-heading font-bold" style="background: linear-gradient(135deg, #784587 0%, #9d5ba8 50%, #784587 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Itapp Digital</span>
                 </a>
                 <div class="flex items-center space-x-4">
                     <a href="{{ route('public.profile', $product->profile->user->username) }}" 
@@ -161,7 +163,7 @@
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-400 py-8 mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; {{ date('Y') }} CardPro. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Itapp Digital. All rights reserved.</p>
         </div>
     </footer>
 </body>
