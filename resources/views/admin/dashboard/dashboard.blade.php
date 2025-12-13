@@ -100,6 +100,10 @@
                    class="tab-button px-6 py-3 rounded-xl font-semibold {{ request()->routeIs('admin.social-settings.*') ? 'active' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                     <i class="fas fa-share-alt mr-2"></i> Social Settings
                 </a>
+                <a href="{{ route('admin.contact-messages.index') }}" 
+                   class="tab-button px-6 py-3 rounded-xl font-semibold {{ request()->routeIs('admin.contact-messages.*') ? 'active' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                    <i class="fas fa-envelope mr-2"></i> Contact Messages
+                </a>
             </div>
         </div>
         

@@ -40,6 +40,9 @@ Route::get('/products/{productId}/order', [\App\Http\Controllers\OrderController
 Route::post('/products/{productId}/order', [\App\Http\Controllers\OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/{id}/success', [\App\Http\Controllers\OrderController::class, 'success'])->name('orders.success');
 
+// Contact form route
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
 // Authentication routes (must come before catch-all route)
 require __DIR__ . '/auth.php';
 
@@ -77,6 +80,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Social Settings
     Route::get('social-settings', [\App\Http\Controllers\Admin\SocialSettingController::class, 'index'])->name('social-settings.index');
     Route::put('social-settings', [\App\Http\Controllers\Admin\SocialSettingController::class, 'update'])->name('social-settings.update');
+    
+    // Contact Messages
+    Route::get('contact-messages', [\App\Http\Controllers\Admin\ContactMessageController::class, 'index'])->name('contact-messages.index');
+    Route::get('contact-messages/{contactMessage}', [\App\Http\Controllers\Admin\ContactMessageController::class, 'show'])->name('contact-messages.show');
+    Route::put('contact-messages/{contactMessage}/mark-as-read', [\App\Http\Controllers\Admin\ContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-as-read');
+    Route::delete('contact-messages/{contactMessage}', [\App\Http\Controllers\Admin\ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
 });
 
 // Public product view route (must be before catch-all)

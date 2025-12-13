@@ -158,6 +158,152 @@
             transform: translateY(-2px);
         }
 
+        /* Beautiful Hero Buttons */
+        .hero-btn {
+            min-width: 160px;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Primary Button - Purple Gradient */
+        .hero-btn-primary {
+            background: linear-gradient(180deg, #a865b3 0%, #784587 100%);
+            color: white;
+        }
+
+        .hero-btn-primary:hover {
+            background: linear-gradient(180deg, #b575c3 0%, #8a4f9a 100%);
+            box-shadow: 0 8px 25px rgba(157, 91, 168, 0.5);
+        }
+
+        /* Secondary Button - White with Blue Text */
+        .hero-btn-secondary {
+            background: white;
+            color: #667eea;
+            border: none;
+        }
+
+        .hero-btn-secondary:hover {
+            background: #f8fafc;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+        }
+
+        /* Contact Button - Light Purple Gradient */
+        .hero-btn-contact {
+            background: linear-gradient(180deg, #c49ad4 0%, #a865b3 100%);
+            color: white;
+        }
+
+        .hero-btn-contact:hover {
+            background: linear-gradient(180deg, #d4aae4 0%, #b575c3 100%);
+            box-shadow: 0 8px 25px rgba(184, 140, 200, 0.5);
+        }
+
+        .hero-btn div {
+            line-height: 1.3;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-btn > div > div {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .hero-btn span {
+            display: block;
+            font-size: 0.875rem;
+            letter-spacing: 0.01em;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .hero-btn i {
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            font-size: 1.25rem;
+        }
+
+        .hero-btn:hover i {
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 640px) {
+            .hero-btn {
+                min-width: 100% !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0.875rem 1.25rem;
+                justify-content: center;
+                margin: 0;
+                display: flex !important;
+            }
+            
+            .hero-btn span {
+                font-size: 0.8rem;
+            }
+
+            .hero-btn i {
+                font-size: 1.1rem;
+            }
+
+            .hero-btn > div {
+                justify-content: center;
+                width: 100%;
+            }
+
+            /* Ensure buttons container doesn't overflow */
+            .flex.flex-col.sm\:flex-row {
+                width: 100%;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            /* Ensure all buttons are visible */
+            .hero-btn-primary,
+            .hero-btn-secondary,
+            .hero-btn-contact {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+        }
+
+        /* Contact Modal Mobile Styles */
+        @media (max-width: 640px) {
+            #contactModal {
+                padding: 0.5rem;
+                align-items: flex-start;
+            }
+
+            #contactModal > div {
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+                max-height: calc(100vh - 2rem);
+            }
+        }
+
         .nav-blur {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
@@ -324,56 +470,61 @@
 <body class="bg-white dark:bg-slate-900">
     @if(isset($socialSettings) && $socialSettings)
         <!-- Social Links and Phone Bar (Above Navbar) -->
-        <div class="fixed top-0 left-0 right-0 z-[60] bg-gray-900 text-white py-2 px-4 hidden md:block">
-            <div class="max-w-7xl mx-auto flex justify-between items-center text-sm">
-                <div class="flex items-center space-x-6">
+        <div class="fixed top-0 left-0 right-0 z-[60] bg-gray-900 text-white py-2 sm:py-2 px-3 sm:px-4 min-h-[60px] sm:min-h-[40px]">
+            <div class="max-w-7xl mx-auto flex flex-row justify-between items-center text-xs sm:text-sm gap-2 sm:gap-0 h-full overflow-x-auto">
+                <!-- Left Side: Phone and Email (Horizontal on Mobile) -->
+                <div class="flex flex-row items-center gap-2 sm:gap-6 flex-shrink-0">
                     @if($socialSettings->phone)
                         <a href="tel:{{ preg_replace('/[^0-9+]/', '', $socialSettings->phone) }}" class="flex items-center hover:text-indigo-400 transition">
-                            <i class="fas fa-phone mr-2"></i>
-                            <span>{{ $socialSettings->phone }}</span>
+                            <i class="fas fa-phone mr-1.5 sm:mr-2 text-sm sm:text-base"></i>
+                            <span class="text-xs sm:text-sm">{{ $socialSettings->phone }}</span>
                         </a>
                     @endif
+                    @if($socialSettings->email)
+                        <a href="mailto:{{ $socialSettings->email }}" class="flex items-center hover:text-indigo-400 transition">
+                            <i class="fas fa-envelope mr-1.5 sm:mr-2 text-sm sm:text-base"></i>
+                            <span class="text-xs sm:text-sm">{{ $socialSettings->email }}</span>
+                        </a>
+                    @endif
+                </div>
+                
+                <!-- Center: Bio Text -->
+                @if(!empty(trim($socialSettings->bio)))
+                    <div class="flex items-center justify-center flex-shrink-0 hidden sm:flex">
+                        <span class="text-xs sm:text-sm text-white/80 hover:text-indigo-400 transition text-center">{{ trim($socialSettings->bio) }}</span>
+                    </div>
+                @endif
+                
+                <!-- Right Side: Social Media Icons -->
+                <div class="flex items-center justify-end gap-2 sm:gap-4 flex-shrink-0">
                     @if($socialSettings->facebook)
                         <a href="{{ $socialSettings->facebook }}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition">
-                            <i class="fab fa-facebook text-lg"></i>
+                            <i class="fab fa-facebook text-base sm:text-lg"></i>
                         </a>
                     @endif
                     @if($socialSettings->instagram)
                         <a href="{{ $socialSettings->instagram }}" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition">
-                            <i class="fab fa-instagram text-lg"></i>
+                            <i class="fab fa-instagram text-base sm:text-lg"></i>
                         </a>
                     @endif
                     @if($socialSettings->twitter)
                         <a href="{{ $socialSettings->twitter }}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition">
-                            <i class="fab fa-twitter text-lg"></i>
+                            <i class="fab fa-twitter text-base sm:text-lg"></i>
                         </a>
                     @endif
                     @if($socialSettings->linkedin)
                         <a href="{{ $socialSettings->linkedin }}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition">
-                            <i class="fab fa-linkedin text-lg"></i>
+                            <i class="fab fa-linkedin text-base sm:text-lg"></i>
                         </a>
                     @endif
                     @if($socialSettings->youtube)
                         <a href="{{ $socialSettings->youtube }}" target="_blank" rel="noopener noreferrer" class="hover:text-red-500 transition">
-                            <i class="fab fa-youtube text-lg"></i>
+                            <i class="fab fa-youtube text-base sm:text-lg"></i>
                         </a>
                     @endif
                     @if($socialSettings->tiktok)
                         <a href="{{ $socialSettings->tiktok }}" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">
-                            <i class="fab fa-tiktok text-lg"></i>
-                        </a>
-                    @endif
-                </div>
-                @if(!empty(trim($socialSettings->bio)))
-                    <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center">
-                        <span class="text-sm text-white hover:text-indigo-400 transition">{{ trim($socialSettings->bio) }}</span>
-                    </div>
-                @endif
-                <div class="flex items-center">
-                    @if($socialSettings->email)
-                        <a href="mailto:{{ $socialSettings->email }}" class="flex items-center hover:text-indigo-400 transition">
-                            <i class="fas fa-envelope mr-2"></i>
-                            <span>{{ $socialSettings->email }}</span>
+                            <i class="fab fa-tiktok text-base sm:text-lg"></i>
                         </a>
                     @endif
                 </div>
@@ -382,7 +533,7 @@
     @endif
 
     <!-- Navigation -->
-    <nav class="fixed left-0 right-0 z-50 nav-blur shadow-sm {{ isset($socialSettings) && $socialSettings ? 'top-10' : 'top-0' }}">
+    <nav class="fixed left-0 right-0 z-[70] nav-blur shadow-sm {{ isset($socialSettings) && $socialSettings ? 'top-[60px] sm:top-10' : 'top-0' }}">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex items-center space-x-3">
@@ -430,7 +581,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="hero" class="hero-gradient text-white pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden hero-section scroll-mt-20 {{ isset($socialSettings) && $socialSettings ? 'mt-10' : '' }}">
+    <section id="hero" class="hero-gradient text-white pt-40 sm:pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden hero-section scroll-mt-20 {{ isset($socialSettings) && $socialSettings ? 'mt-[140px] sm:mt-10' : '' }}">
         <div class="absolute inset-0 pattern-dots opacity-20"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid md:grid-cols-2 gap-12 items-center">
@@ -444,13 +595,40 @@
                     <p class="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
                         Professional, customizable business cards that showcase your brand and make connecting effortless. Share your card anywhere, anytime.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                        <a href="{{ route('register') }}" class="btn-primary text-white px-8 py-4 rounded-xl font-bold text-lg inline-flex items-center justify-center shadow-xl">
-                            <i class="fas fa-rocket mr-2"></i> Get Started Free
+                    <div class="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center md:justify-start">
+                        <!-- Get Started Free Button -->
+                        <a href="{{ route('register') }}" class="hero-btn hero-btn-primary group">
+                            <div class="flex items-center justify-center sm:justify-start">
+                                <i class="fas fa-rocket mr-2.5 flex-shrink-0"></i>
+                                <div class="flex flex-col items-center sm:items-start leading-tight">
+                                    <span>Get</span>
+                                    <span>Started</span>
+                                    <span>Free</span>
+                                </div>
+                            </div>
                         </a>
-                        <a href="#how-it-works" class="btn-secondary px-8 py-4 rounded-xl font-bold text-lg inline-flex items-center justify-center">
-                            <i class="fas fa-play-circle mr-2"></i> See How It Works
+                        
+                        <!-- See How It Works Button -->
+                        <a href="#how-it-works" class="hero-btn hero-btn-secondary group">
+                            <div class="flex items-center justify-center sm:justify-start">
+                                <i class="fas fa-play-circle mr-2.5 flex-shrink-0" style="color: #667eea;"></i>
+                                <div class="flex flex-col items-center sm:items-start leading-tight">
+                                    <span>See How It</span>
+                                    <span>Works</span>
+                                </div>
+                            </div>
                         </a>
+                        
+                        <!-- Contact Us Button -->
+                        <button onclick="openContactModal()" class="hero-btn hero-btn-contact group">
+                            <div class="flex items-center justify-center sm:justify-start">
+                                <i class="fas fa-envelope mr-2.5 flex-shrink-0"></i>
+                                <div class="flex flex-col items-center sm:items-start leading-tight">
+                                    <span>Contact</span>
+                                    <span>Us</span>
+                                </div>
+                            </div>
+                        </button>
                     </div>
                     <div class="mt-8 flex flex-wrap gap-6 justify-center md:justify-start text-sm">
                         <div class="flex items-center">
@@ -1199,6 +1377,150 @@
             <i class="fab fa-whatsapp text-2xl"></i>
         </a>
     @endif
+
+    <!-- Contact Us Modal -->
+    <div id="contactModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full mx-auto my-auto transform transition-all max-h-[90vh] overflow-y-auto">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-4 sm:px-6 py-3 sm:py-4 rounded-t-2xl sticky top-0 z-10">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl sm:text-2xl font-bold text-white">Contact Us</h3>
+                    <button onclick="closeContactModal()" class="text-white hover:text-gray-200 transition p-2 -mr-2">
+                        <i class="fas fa-times text-lg sm:text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <form action="{{ route('contact.store') }}" method="POST" class="p-4 sm:p-6">
+                @csrf
+                
+                @if(session('contact_success'))
+                <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-3 sm:p-4 rounded text-sm sm:text-base">
+                    <p>{{ session('contact_success') }}</p>
+                </div>
+                @endif
+
+                @if($errors->any())
+                <div class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-3 sm:p-4 rounded text-sm sm:text-base">
+                    <ul class="list-disc list-inside space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
+                <div class="mb-4">
+                    <label for="full_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Full Name <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="full_name" 
+                        name="full_name" 
+                        value="{{ old('full_name') }}"
+                        required
+                        class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter your full name"
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Email <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        value="{{ old('email') }}"
+                        required
+                        class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter your email address"
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label for="whatsapp_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        WhatsApp Number <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="whatsapp_number" 
+                        name="whatsapp_number" 
+                        value="{{ old('whatsapp_number') }}"
+                        required
+                        class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-700 dark:text-white"
+                        placeholder="+971 50 123 4567"
+                    >
+                </div>
+
+                <div class="mb-6">
+                    <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Message <span class="text-red-500">*</span>
+                    </label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        rows="4" 
+                        required
+                        class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-700 dark:text-white resize-none"
+                        placeholder="Enter your message here..."
+                    >{{ old('message') }}</textarea>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:shadow-lg transition-all duration-300"
+                    >
+                        <i class="fas fa-paper-plane mr-2"></i> Send Message
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="closeContactModal()" 
+                        class="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-300 rounded-lg font-semibold text-sm sm:text-base hover:bg-gray-300 dark:hover:bg-slate-600 transition"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openContactModal() {
+            document.getElementById('contactModal').classList.remove('hidden');
+            document.getElementById('contactModal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').classList.add('hidden');
+            document.getElementById('contactModal').classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('contactModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeContactModal();
+            }
+        });
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
+
+        // Auto-close on success
+        @if(session('contact_success'))
+            setTimeout(function() {
+                closeContactModal();
+            }, 3000);
+        @endif
+    </script>
 </body>
 
 </html>
